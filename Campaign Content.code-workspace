@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../Eclipse Phase/Character Builder/eclipsephase/Campaign Content"
+		},
+		{
+			"name": "EclipsePhaseContent",
+			"path": "Narrative Content/EclipsePhaseContent"
+		}
+	],
+	"settings": {}
+}

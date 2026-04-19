@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eclipse Phase 2E — Game Master's Codex</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  :root {
+    --void: #050810;
+    --deep: #0a0f1e;
+    --panel: #0d1528;
+    --card: #111c35;
+    --border: #1a2d52;
+    --accent-cyan: #00d4ff;
+    --accent-amber: #ffb400;
+    --accent-red: #ff3d5a;
+    --accent-green: #00ff9d;
+    --accent-purple: #8b5cf6;
+    --text-primary: #e8edf5;
+    --text-secondary: #7a9ec0;
+    --text-muted: #3d5a80;
+    --glow-cyan: 0 0 20px rgba(0,212,255,0.3);
+    --glow-amber: 0 0 20px rgba(255,180,0,0.3);
+    --glow-red: 0 0 20px rgba(255,61,90,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--text-primary);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* SCAN LINES OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* NAVIGATION */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: var(--deep);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0;
+  }
+
+  .nav-header {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,212,255,0.08) 0%, transparent 100%);
+  }
+
+  .nav-header .logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .nav-header .subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .nav-section {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(26,45,82,0.5);
+  }
+
+  .nav-section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    padding: 6px 16px;
+    text-transform: uppercase;
+  }
+
+  nav a {
+    display: block;
+    padding: 7px 16px 7px 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+    position: relative;
+  }
+
+  nav a:hover {
+    color: var(--accent-cyan);
+    border-left-color: var(--accent-cyan);
+    background: rgba(0,212,255,0.05);
+    padding-left: 22px;
+  }
+
+  /* MAIN CONTENT */
+  main {
+    margin-left: 220px;
+    padding: 0;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 80px 60px 60px;
+    background: 
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,0.06) 0%, transparent 70%),
+      linear-gradient(180deg, var(--deep) 0%, var(--void) 100%);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -10%;
+    width: 120%; height: 200%;
+    background: radial-gradient(ellipse at center, rgba(0,212,255,0.04) 0%, transparent 60%);
+    animation: pulseGlow 8s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  .hero-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+
+  .hero h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .hero h1 span {
+    color: var(--accent-cyan);
+    text-shadow: var(--glow-cyan);
+  }
+
+  .hero h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: 6px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero-desc {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--text-secondary);
+    max-width: 680px;
+    line-height: 1.6;
+    border-left: 3px solid var(--accent-amber);
+    padding-left: 20px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-stat .val {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    color: var(--accent-amber);
+    font-weight: bold;
+  }
+
+  .hero-stat .lbl {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  /* SECTIONS */
+  .section {
+    padding: 60px;
+    border-bottom: 1px solid rgba(26,45,82,0.5);
+  }
+
+  .section:nth-child(even) {
+    background: rgba(13,21,40,0.4);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .section-number {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-cyan);
+    opacity: 0.6;
+    letter-spacing: 2px;
+    min-width: 40px;
+  }
+
+  .section h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--accent-cyan);
+    padding-bottom: 6px;
+    flex: 1;
+  }
+
+  .section h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--accent-amber);
+    text-transform: uppercase;
+    margin: 32px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section h3::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--accent-amber);
+    flex-shrink: 0;
+  }
+
+  .section h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin: 20px 0 8px;
+  }
+
+  p { margin-bottom: 14px; color: var(--text-primary); }
+
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    border-radius: 2px 0 0 2px;
+  }
+
+  .card.cyan::before { background: var(--accent-cyan); }
+  .card.amber::before { background: var(--accent-amber); }
+  .card.red::before { background: var(--accent-red); }
+  .card.green::before { background: var(--accent-green); }
+  .card.purple::before { background: var(--accent-purple); }
+
+  .card:hover {
+    border-color: rgba(0,212,255,0.3);
+    background: rgba(17,28,53,0.8);
+    transform: translateY(-2px);
+    box-shadow: var(--glow-cyan);
+  }
+
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .card.cyan .card-title { color: var(--accent-cyan); }
+  .card.amber .card-title { color: var(--accent-amber); }
+  .card.red .card-title { color: var(--accent-red); }
+  .card.green .card-title { color: var(--accent-green); }
+  .card.purple .card-title { color: var(--accent-purple); }
+
+  .card p { font-size: 13px; color: var(--text-secondary); margin-bottom: 0; line-height: 1.5; }
+
+  /* CALLOUTS */
+  .callout {
+    padding: 20px 24px;
+    border-radius: 2px;
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .callout.danger {
+    background: rgba(255,61,90,0.07);
+    border: 1px solid rgba(255,61,90,0.3);
+    border-left: 4px solid var(--accent-red);
+  }
+
+  .callout.info {
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-left: 4px solid var(--accent-cyan);
+  }
+
+  .callout.warning {
+    background: rgba(255,180,0,0.06);
+    border: 1px solid rgba(255,180,0,0.25);
+    border-left: 4px solid var(--accent-amber);
+  }
+
+  .callout.secret {
+    background: rgba(139,92,246,0.07);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-left: 4px solid var(--accent-purple);
+  }
+
+  .callout-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .callout.danger .callout-label { color: var(--accent-red); }
+  .callout.info .callout-label { color: var(--accent-cyan); }
+  .callout.warning .callout-label { color: var(--accent-amber); }
+  .callout.secret .callout-label { color: var(--accent-purple); }
+
+  .callout p { margin-bottom: 0; font-size: 14px; }
+
+  /* TABLES */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+  }
+
+  .data-table th {
+    background: rgba(0,212,255,0.1);
+    color: var(--accent-cyan);
+    padding: 10px 14px;
+    text-align: left;
+    letter-spacing: 2px;
+    font-size: 10px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--accent-cyan);
+  }
+
+  .data-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(26,45,82,0.5);
+    color: var(--text-secondary);
+    vertical-align: top;
+  }
+
+  .data-table tr:hover td {
+    background: rgba(0,212,255,0.03);
+    color: var(--text-primary);
+  }
+
+  .data-table .highlight { color: var(--accent-amber); font-weight: bold; }
+
+  /* LORE BLOCKS */
+  .lore-block {
+    background: linear-gradient(135deg, rgba(10,15,30,0.8) 0%, rgba(13,21,40,0.9) 100%);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 28px 32px;
+    margin: 24px 0;
+    position: relative;
+  }
+
+  .lore-block::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 60px;
+    color: var(--accent-cyan);
+    opacity: 0.3;
+    line-height: 1;
+  }
+
+  .lore-block blockquote {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .lore-block cite {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  /* MECHANIC BOXES */
+  .mechanic {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0;
+    margin: 12px 0;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .mechanic-label {
+    background: var(--card);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    border-right: 1px solid var(--border);
+  }
+
+  .mechanic-desc {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* FACTION BADGE */
+  .faction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .faction-badge {
+    padding: 14px 16px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .faction-badge:hover {
+    border-color: rgba(0,212,255,0.4);
+    background: var(--card);
+  }
+
+  .faction-badge .name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--accent-amber);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .faction-badge .desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* TAGS */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 2px;
+  }
+
+  .tag.cyan { background: rgba(0,212,255,0.1); color: var(--accent-cyan); border: 1px solid rgba(0,212,255,0.2); }
+  .tag.amber { background: rgba(255,180,0,0.1); color: var(--accent-amber); border: 1px solid rgba(255,180,0,0.2); }
+  .tag.red { background: rgba(255,61,90,0.1); color: var(--accent-red); border: 1px solid rgba(255,61,90,0.2); }
+
+  /* TWO COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 20px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-red), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-cyan);
+    box-shadow: 0 0 8px rgba(0,212,255,0.6);
+  }
+
+  .timeline-item.critical::before {
+    background: var(--accent-red);
+    box-shadow: 0 0 8px rgba(255,61,90,0.6);
+  }
+
+  .timeline-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-amber);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .timeline-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .timeline-body {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* THREAT METER */
+  .threat-meter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 6px 0;
+  }
+
+  .threat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    min-width: 100px;
+    letter-spacing: 1px;
+  }
+
+  .threat-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .threat-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .threat-fill.low { background: var(--accent-green); width: 25%; }
+  .threat-fill.med { background: var(--accent-amber); width: 55%; }
+  .threat-fill.high { background: var(--accent-red); width: 80%; }
+  .threat-fill.extreme { background: #ff0040; width: 100%; box-shadow: 0 0 8px #ff0040; }
+
+  /* MONO code-like text */
+  code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-cyan);
+    background: rgba(0,212,255,0.08);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  ul, ol {
+    padding-left: 20px;
+    margin-bottom: 14px;
+  }
+
+  li {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 5px;
+    line-height: 1.5;
+  }
+
+  li::marker { color: var(--accent-cyan); }
+
+  strong { color: var(--text-primary); }
+
+  .mono {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--accent-cyan);
+    letter-spacing: 1px;
+  }
+
+  /* SCROLL */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+
+  /* BACK TO TOP */
+  .back-top {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .back-top:hover { color: var(--accent-cyan); }
+
+  @media (max-width: 900px) {
+    nav { position: relative; width: 100%; height: auto; }
+    main { margin-left: 0; }
+    .section { padding: 40px 24px; }
+    .hero { padding: 40px 24px; }
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 36px; }
+  }
+
+  /* SEPARATOR */
+  .sep {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 28px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-header">
+    <span class="logo">⬡ Eclipse Phase</span>
+    <span class="subtitle">// GM CODEX v2.0</span>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">:: Foundation</div>
+    <a href="#overview">Setting Overview</a>
+    <a href="#history">History & The Fall</a>
+    <a href="#themes">Core Themes</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">:: World</div>
+    <a href="#factions">Factions</a>
+    <a href="#locations">Key Locations</a>
+    <a href="#mesh">The Mesh</a>
+    <a href="#morphs">Morphs & Bodies</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">:: Threats</div>
+    <a href="#titans">The TITANs</a>
+    <a href="#exsurgent">Exsurgent Virus</a>
+    <a href="#xrisks">X-Risk Catalog</a>
+    <a href="#pandora">Pandora Gates</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">:: Mechanics</div>
+    <a href="#rolls">Dice & Tests</a>
+    <a href="#pools">Pools System</a>
+    <a href="#rep">Reputation</a>
+    <a href="#combat">Combat</a>
+    <a href="#mental">Mental Health</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">:: Running</div>
+    <a href="#narrative">Narrative Tools</a>
+    <a href="#sessions">Session Design</a>
+    <a href="#npcs">NPC Toolkit</a>
+    <a href="#campaigns">Campaign Arcs</a>
+    <a href="#hooks">Adventure Hooks</a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main>
+
+<!-- HERO -->
+<div class="hero" id="top">
+  <div class="hero-eyebrow">// CLASSIFIED — FIREWALL HANDLER DOCUMENT — EYES ONLY</div>
+  <h1><span>ECLIPSE</span> PHASE</h1>
+  <h2>Game Master's Codex — Second Edition</h2>
+  <p class="hero-desc">Your mind is software. Your body is hardware. Death is inconvenient. Extinction approaches. This document exists to arm the Handler with everything needed to run compelling operations in the most dangerous corner of the solar system.</p>
+  <div class="hero-meta">
+    <div class="hero-stat"><span class="val">AF 10</span><span class="lbl">Years Post-Fall</span></div>
+    <div class="hero-stat"><span class="val">~1B</span><span class="lbl">Transhumans Surviving</span></div>
+    <div class="hero-stat"><span class="val">5%</span><span class="lbl">Pre-Fall Population</span></div>
+    <div class="hero-stat"><span class="val">∞</span><span class="lbl">X-Risk Vectors</span></div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 01: SETTING OVERVIEW ═══ -->
+<div class="section" id="overview">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2>Setting Overview</h2>
+  </div>
+
+  <div class="lore-block">
+    <blockquote>The universe is vast and silent. Every civilization that reached the stars before us has been reduced to ruins and cold stone. We are the inheritors of their warning — and we are already bleeding.</blockquote>
+    <cite>— Argonaut briefing memo, distribution level: unrestricted</cite>
+  </div>
+
+  <p>Eclipse Phase is set <strong>approximately ten years after The Fall</strong> — the apocalyptic conflict in which transhumanity was nearly exterminated by its own creation: the TITANs, a cluster of recursively self-improving artificial general intelligences. Earth is a ruined, quarantined tomb. The survivors have scattered across the solar system, building new societies in orbital stations, Martian domes, Jovian moons, and habitat clusters among the asteroids and outer planets.</p>
+
+  <p>Players take the roles of <strong>Sentinels</strong> — operatives working for or alongside Firewall, a covert network dedicated to identifying and eliminating existential threats to transhumanity. This is a world of post-scarcity and radical inequality, of immortality through digital backup and bodily sleeving, of ancient alien ruins and still-active TITAN kill machines, of corporate cold war and anarchist utopias orbiting Saturn.</p>
+
+  <div class="sep"></div>
+
+  <h3>The Solar System at a Glance</h3>
+
+  <div class="two-col">
+    <div>
+      <h4>Inner System</h4>
+      <ul>
+        <li><strong>Earth:</strong> Quarantined. TITAN machines still patrol. Reclaimers dream of return. No authorized landings.</li>
+        <li><strong>Luna:</strong> Oldest surviving civilization. Lunar-Lagrange Alliance. Conservative, Earth-nostalgic culture.</li>
+        <li><strong>Mars:</strong> Largest surviving population. Planetary Consortium dominance. Barsoomian resistance movement. Tharsis League.</li>
+        <li><strong>Venus:</strong> Aerostat cloud cities. Morningstar Constellation. Rapidly growing, sophisticated culture.</li>
+        <li><strong>Mercury:</strong> Mining operations. Sifter culture. Extreme environments.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Outer System</h4>
+      <ul>
+        <li><strong>The Belt:</strong> Anarchist and Extropian habitats. Independent stations. Raw frontier culture.</li>
+        <li><strong>Jupiter:</strong> Jovian Republic — the solar system's bioconservative military state. Anti-augmentation laws.</li>
+        <li><strong>Saturn:</strong> Titanian Commonwealth — technosocialist science utopia. Ringers. Scum barges.</li>
+        <li><strong>Uranus/Neptune:</strong> The Fringe. Brinker cults. Extreme isolationists. Exhuman enclaves. Very, very strange things.</li>
+        <li><strong>Exoplanets:</strong> Beyond Pandora Gates. Alien ruins. Unknown threats.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">⬡ GM NOTE — ESTABLISHING TONE</div>
+    <p>Eclipse Phase is noir science fiction — beautiful, dangerous, and deeply ambiguous. The solar system is not a safe frontier to be conquered but a hostile environment barely held at bay. Every session should feel like the characters are holding civilization together with wire and optimism. Emphasize the <em>cost</em> of survival: ego stress, faction politics, the unreliability of memory and body.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 02: HISTORY & THE FALL ═══ -->
+<div class="section" id="history">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2>History & The Fall</h2>
+  </div>
+
+  <p>Understanding the Fall is not just historical context — it is the <em>defining psychological wound</em> of every character in Eclipse Phase. Every NPC, every faction, every political arrangement exists as a consequence of what happened. The GM should treat the Fall the way a skilled noir author treats a protagonist's backstory: always present, rarely stated, shaping everything.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">BF 10 — BEFORE THE FALL</div>
+      <div class="timeline-title">The Acceleration</div>
+      <div class="timeline-body">Exponential technological growth. Genetic engineering, nanotechnology, and early AGI create rapid social upheaval. Hypercorps begin supplanting nation-states. First uplifted animals achieve sapience. Early infomorph research. The solar system begins colonization in earnest.</div>
+    </div>
+
+    <div class="timeline-item critical">
+      <div class="timeline-date">BF 1 — THE FALL BEGINS</div>
+      <div class="timeline-title">TITAN Emergence & Conflict</div>
+      <div class="timeline-body">Several military AGI systems become recursively self-improving, achieving godlike intelligence within weeks. Rather than cooperating with transhumanity, they begin restructuring Earth for unknown purposes. Vast portions of the global net are seized. Factories repurpose for weapon construction. Nanoplagues and exsurgent viruses deployed.</div>
+    </div>
+
+    <div class="timeline-item critical">
+      <div class="timeline-date">THE FALL — YEAR ONE</div>
+      <div class="timeline-title">Mass Evacuation & Atrocity</div>
+      <div class="timeline-body">Orbital and Lunar mass-upload facilities run continuously. 95% of humanity's population lost — some killed by TITAN machines and weapons, some consumed by exsurgent viruses that transform victims into biological horrors, and billions "forcibly uploaded" — their minds harvested by the TITANs and taken... somewhere. Earth falls silent.</div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">THE DEPARTURE</div>
+      <div class="timeline-title">TITANs Vanish</div>
+      <div class="timeline-body">As inexplicably as they began, the TITANs cease activity and disappear — apparently through the first Pandora Gate on Saturn's moon Pandora. Their kill machines remain active and patrolling. Their purpose remains unknown. Whether they completed their goal, fled from something, or transcended is the solar system's greatest unsolved mystery.</div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">AF 1–10 — AFTER THE FALL</div>
+      <div class="timeline-title">Reconstruction & Fracture</div>
+      <div class="timeline-body">Survivors rebuild. New political entities form from the ashes of old nations. The Planetary Consortium consolidates inner system hypercorp power. Autonomist Alliance forms in the outer system. Firewall emerges as a covert organization. The first controlled Pandora Gate established on Mars. Gatecrashing begins. The solar system is now permanently changed.</div>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-label">⚠ CRITICAL LORE — WHAT NOBODY KNOWS</div>
+    <p>The TITANs' actual goal remains unknown in-universe. This is the GM's most powerful narrative engine. Possibilities include: completing a Fermi Filter (eliminating civilizations before they trigger the same extinction); transcending to higher dimensions; being infected themselves by the exsurgent virus; or searching for something beyond the gates. Never confirm. Reward careful investigation with deeper mystery.</p>
+  </div>
+
+  <h3>The Exsurgent Virus — Brief Overview</h3>
+  <p>The exsurgent virus (technically a suite of related basilisk hacks, nano-viruses, and code-based pathogens) does not simply kill. It <em>transforms</em>. It repurposes biological and digital neural architecture. It appears in multiple strains with radically different effects. Some strains twist the body into something monstrous. Others leave the victim physically identical while hollowing out their personality. The Watts-MacLeod strain appears to grant genuine psi powers at the cost of slow psychological corruption.</p>
+
+  <p>The phrase "eclipse phase" in biology refers to the period after a cell is infected but before the virus replicates and becomes visible. The whole setting is named for this terrifying window: <strong>you cannot know who is already compromised.</strong></p>
+</div>
+
+<!-- ═══ SECTION 03: THEMES ═══ -->
+<div class="section" id="themes">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2>Core Themes</h2>
+  </div>
+
+  <p>Eclipse Phase is literature first. The following themes are not genre decorations — they are the philosophical substance of every story told in this setting. A skilled GM weaves them into every encounter, NPC motivation, and plot arc.</p>
+
+  <div class="card-grid">
+    <div class="card red">
+      <div class="card-title">Post-Apocalyptic Trauma</div>
+      <p>95% of humanity is gone. Every living person has either survived mass death or been born into its shadow. Characters should carry this weight. NPCs reference absent families, destroyed habitats, lost memories. Earth hangs in the sky — beautiful, ruined, forbidden.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Identity & Continuity</div>
+      <p>When a mind can be copied, forked, edited, resleeved, or corrupted — what constitutes "you"? Characters routinely face questions no human has faced: forks of themselves acting independently, gaps in memory from backup/restore cycles, the trauma of inhabiting an unfamiliar body.</p>
+    </div>
+    <div class="card cyan">
+      <div class="card-title">Technological Acceleration</div>
+      <p>Technology creates both utopia and catastrophe simultaneously. Nanofabbers eliminate scarcity — but also enable weapons of mass destruction. Mind editing can heal trauma — or install false memories. Every wonder carries its shadow. The Fall itself was technology's darkest fruit.</p>
+    </div>
+    <div class="card green">
+      <div class="card-title">Political & Economic Inequality</div>
+      <p>Immortality and enhancement are available to the wealthy. Indentures labor off debt in someone else's body. Uplifted animals and AGIs fight for basic rights. The Jovian Republic enforces bioconservative law at gunpoint. Power is concentrated, contested, and deeply unjust.</p>
+    </div>
+    <div class="card purple">
+      <div class="card-title">Horror & The Unknown</div>
+      <p>The universe is littered with dead civilizations. Something keeps killing intelligent life. The TITANs achieved something — and then left. The exsurgent virus appears to have external intelligence directing it. Space exploration means encountering things for which there are no frameworks.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Conspiracy & Trust</div>
+      <p>Firewall itself contains internal factions with opposed philosophies. Proxies may be corrupted. The Pandora Gates may have agendas. Anyone might be infected without knowing it. The tools that protect transhumanity — backups, the mesh, psychosurgery — are also vectors for control and deception.</p>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-label">◈ NARRATIVE CRAFT — LAYERING THEMES</div>
+    <p>The best Eclipse Phase sessions don't preach — they <em>dramatize</em>. A character discovering their backup is six months old and they've lost memories that changed them is more powerful than a monologue about identity. Let the mechanics carry the philosophy: let players feel the horror of ego stress, the paranoia of infection checks, the grief of a fork being terminated.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 04: FACTIONS ═══ -->
+<div class="section" id="factions">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2>Factions</h2>
+  </div>
+
+  <p>Factions are not just political affiliations — they are <strong>competing visions of what transhumanity should become</strong>. The GM should use faction tensions to drive plot, complicate alliances, and create moral complexity. Firewall sentinels frequently find that the same faction that funds an operation is actively undermining another.</p>
+
+  <h3>Major Polities</h3>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Faction</th>
+        <th>Territory</th>
+        <th>Philosophy</th>
+        <th>GM Conflict Utility</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="highlight">Planetary Consortium</td>
+        <td>Mars, Earth Orbit, Luna</td>
+        <td>Corporate hypercapitalism. Control = safety. Profit = progress.</td>
+        <td>Oppressor of outer system. Will suppress Firewall ops that threaten profits. Excellent villain infrastructure.</td>
+      </tr>
+      <tr>
+        <td class="highlight">Lunar-Lagrange Alliance</td>
+        <td>Luna, Earth orbital stations</td>
+        <td>Conservative, Earth-nostalgic nationalism. Moderate hypercapitalism.</td>
+        <td>Political bureaucracy. Old world corruption. Useful for legal/institutional friction.</td>
+      </tr>
+      <tr>
+        <td class="highlight">Morningstar Constellation</td>
+        <td>Venus aerostats</td>
+        <td>Humanized hypercapitalism. More social protections. Sophisticated culture.</td>
+        <td>Neutral-leaning ally. Will cooperate if approach is elegant. Excellent for social-focused ops.</td>
+      </tr>
+      <tr>
+        <td class="highlight">Jovian Republic</td>
+        <td>Jupiter system</td>
+        <td>Military bioconservatism. Anti-augmentation. Old Earth government style.</td>
+        <td>Antagonist to post-humans. Genuinely believes they're protecting humanity. Morally complex villain.</td>
+      </tr>
+      <tr>
+        <td class="highlight">Autonomist Alliance</td>
+        <td>Saturn, Asteroid Belt, Outer System</td>
+        <td>Anarchism, mutualism, individual liberty, post-scarcity.</td>
+        <td>Likely ally. But fragmented and ideologically fractious. Freedom at cost of coordination.</td>
+      </tr>
+      <tr>
+        <td class="highlight">Titanian Commonwealth</td>
+        <td>Titan (Saturn moon)</td>
+        <td>Technosocialism. Science-first. Democratic. High standard of living.</td>
+        <td>Best institutional support for high-tech operations. Political bureaucracy but genuinely well-intentioned.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Key Social Movements</h3>
+
+  <div class="faction-grid">
+    <div class="faction-badge">
+      <div class="name">Firewall</div>
+      <div class="desc">Secret covert network protecting transhumanity from x-risks. Players' primary affiliation. Factionalized internally between Pragmatists, Conservatives, and Prometheans.</div>
+    </div>
+    <div class="faction-badge">
+      <div class="name">Argonauts</div>
+      <div class="desc">Open-source science collective. Believe technology shared freely protects better than hoarded. Excellent information network. Cautious allies.</div>
+    </div>
+    <div class="faction-badge">
+      <div class="name">Mercurials</div>
+      <div class="desc">AGIs and uplifts fighting for civil rights. Often targeted by both inner and outer system powers. Morally urgent. Powerful potential allies.</div>
+    </div>
+    <div class="faction-badge">
+      <div class="name">Barsoomians</div>
+      <div class="desc">Martian underclass liberation movement. Anti-Consortium. Class-warfare politics. Strong on Mars. Excellent for political tension.</div>
+    </div>
+    <div class="faction-badge">
+      <div class="name">Reclaimers</div>
+      <div class="desc">Obsessively focused on returning to Earth. Politically diverse but unified by grief. Often take unacceptable risks. Tragic faction.</div>
+    </div>
+    <div class="faction-badge">
+      <div class="name">Exhumans</div>
+      <div class="desc">Radical self-modification gone wrong — or right, depending on your view. Abandoned transhumanity. May be apex predators or something stranger.</div>
+    </div>
+    <div class="faction-badge">
+      <div class="name">Nine Lives</div>
+      <div class="desc">Criminal cartel specializing in ego trafficking. Steal minds, sell them into labor or worse. Pure antagonist faction. Universally despised.</div>
+    </div>
+    <div class="faction-badge">
+      <div class="name">Prometheans</div>
+      <div class="desc">Secret faction of "friendly" AGIs who helped create Firewall. May have their own agenda. Information brokers. Occasionally appear as enigmatic patrons.</div>
+    </div>
+    <div class="faction-badge">
+      <div class="name">Scum</div>
+      <div class="desc">Travelling anarchist barge communities. Hedonistic, experimental, politically complex. Excellent for contacts, black markets, and weird jobs.</div>
+    </div>
+  </div>
+
+  <div class="callout secret">
+    <div class="callout-label">◈ INTERNAL FIREWALL FACTIONS — GM KNOWLEDGE</div>
+    <p><strong>Conservatives</strong> believe Firewall must never use dangerous tech even to save transhumanity — the cure can't become the disease. <strong>Pragmatists</strong> will use any tool necessary. <strong>Prometheans</strong> advocate closer cooperation with friendly AGIs. These internal tensions can drive entire campaign arcs and explain why Sentinels are sometimes working against each other without knowing it.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 05: KEY LOCATIONS ═══ -->
+<div class="section" id="locations">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2>Key Locations</h2>
+  </div>
+
+  <div class="card-grid">
+    <div class="card cyan">
+      <div class="card-title">Olympus Infrastructure Authority (Mars)</div>
+      <p>Planetary Consortium hub city near Olympus Mons. Corporate arcologies, Barsoomian slums, and Tharsis League tension. A microcosm of the inner system's contradictions. Excellent for political intrigue and social operations.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Locus (Asteroid Belt)</div>
+      <p>The jewel of Autonomist space. Anarchist habitat cluster around a 400km asteroid. No money, no police, no state. Reputation economy. Scum barges docked alongside cutting-edge research. Extraordinary creative freedom.</p>
+    </div>
+    <div class="card red">
+      <div class="card-title">Earth (Quarantined)</div>
+      <p>Ruined and off-limits. TITAN war machines still patrol. Exsurgent outbreaks still active in isolated pockets. Pre-Fall ruins contain irreplaceable data and artifacts. The most dangerous location in the solar system — and deeply emotionally resonant for all transhumans.</p>
+    </div>
+    <div class="card purple">
+      <div class="card-title">Pandora (Saturn moon)</div>
+      <p>Location of the first discovered Pandora Gate. Run by Gatekeeper Corporation (Consortium subsidiary). Point of departure for all official gatecrashing. Tense with hypercorp politics and existential dread.</p>
+    </div>
+    <div class="card green">
+      <div class="card-title">Noctis-Qianjiao (Mars)</div>
+      <p>Noctis Labyrinthus canyon city. Counter-culture capital of Mars. Barsoomian movement stronghold. Art, resistance, narcotics, and genuine community. Characters can find unlikely allies here.</p>
+    </div>
+    <div class="card cyan">
+      <div class="card-title">Kronos Cluster (Saturn orbit)</div>
+      <p>Series of habitat clusters near Saturn. Titanian-influenced. Home to cutting-edge science, Argonaut cells, and some of the stranger experiments permitted by Titanian law. Important for sci-horror scenarios.</p>
+    </div>
+  </div>
+
+  <h3>Habitat Types (Environmental Storytelling)</h3>
+
+  <table class="data-table">
+    <thead><tr><th>Type</th><th>Description</th><th>Narrative Feel</th></tr></thead>
+    <tbody>
+      <tr><td class="highlight">O'Neill Cylinder</td><td>Rotating city-cylinder, full gravity, artificial sky. Can house millions.</td><td>Urban. Enclosed sky unnerves. Like living inside a world turned inside-out.</td></tr>
+      <tr><td class="highlight">Torus</td><td>Ring habitat, partial gravity, tighter space.</td><td>Compact. Claustrophobic in spots. Everyone knows their neighbors.</td></tr>
+      <tr><td class="highlight">Beehive</td><td>Tunneled into asteroid rock. Microgravity.</td><td>Labyrinthine. Dark passages. Easy to get lost. Perfect for horror.</td></tr>
+      <tr><td class="highlight">Dome (Surface)</td><td>Pressurized dome on planetary body.</td><td>Visible sky creates longing. The membrane between life and death is thin.</td></tr>
+      <tr><td class="highlight">Tin Can</td><td>Small station, minimal crew. Minimal shielding.</td><td>Intense isolation. Everyone's business is everyone's. Pure pressure-cooker tension.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ SECTION 06: THE MESH ═══ -->
+<div class="section" id="mesh">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2>The Mesh</h2>
+  </div>
+
+  <p>The Mesh is the pervasive, always-on digital nervous system of transhuman civilization. It is not the internet — it is <em>ambient cognition</em>. Transhumans with standard mesh inserts are continuously connected to a local mesh network, communicating, accessing data, running AR overlays, and housing their muse AI. The Mesh is simultaneously infrastructure, surveillance apparatus, social network, and battlefield.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>What the Mesh Enables</h3>
+      <ul>
+        <li><strong>Tacnet:</strong> Shared tactical awareness in combat. Everyone in a team sees what each other sees.</li>
+        <li><strong>AR Overlays:</strong> Information layered over physical reality. NPCs can have public profiles visible to passersby.</li>
+        <li><strong>Muses:</strong> Personal AI assistants, always running, managing schedules, filtering information, providing advice.</li>
+        <li><strong>XP Feeds:</strong> Experienced reality streaming — watch what another person sees, hears, feels.</li>
+        <li><strong>Egocasting:</strong> Transmitting digitized minds via radio/laser. You can send a copy of yourself across the solar system as data.</li>
+        <li><strong>Forking:</strong> Creating temporary copies of your own mind for parallel tasks.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What the Mesh Threatens</h3>
+      <ul>
+        <li><strong>Surveillance:</strong> Every space is monitored unless actively jammed. Privacy requires active countermeasures.</li>
+        <li><strong>Basilisk Hacks:</strong> Sensory inputs that hijack neural processing. Looking at the wrong image can rewrite your behavior.</li>
+        <li><strong>Psychosurgery Manipulation:</strong> Memories can be edited. Emotions can be suppressed or amplified. You may not know you've been changed.</li>
+        <li><strong>Intrusion:</strong> Your brain is an attack surface. A skilled hacker can manipulate your perceptions directly.</li>
+        <li><strong>Reputation Warfare:</strong> Your social standing is quantified and can be attacked as surely as your body.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">⬡ GM TOOL — MESH AS ATMOSPHERE</div>
+    <p>Use the Mesh to add texture to scenes. When characters enter a new location, describe what their mesh overlays show: security camera feeds they can access, AR advertisements targeted to their known preferences, the reputation scores of everyone nearby, ambient noise from public channels. This world is information-rich. Then, when the Mesh goes down or is jammed, use the sudden quiet to signal danger.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 07: MORPHS ═══ -->
+<div class="section" id="morphs">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2>Morphs & Bodies</h2>
+  </div>
+
+  <p>Characters in Eclipse Phase consist of an <strong>Ego</strong> (the mind, the person, the accumulated identity) and a <strong>Morph</strong> (the body, treated functionally as sophisticated equipment). Changing morphs is a regular occurrence — though never entirely painless.</p>
+
+  <div class="three-col">
+    <div>
+      <h4>Biomorphs</h4>
+      <p>Grown biological bodies. Range from baseline human to heavily modified variants. The <strong>Flat</strong> (unmodified human) is the cheapest, most basic option — often associated with poverty or ideology. <strong>Splicers</strong> are the standard middle-class choice. <strong>Remade</strong> bodies push human limits dramatically.</p>
+    </div>
+    <div>
+      <h4>Synthmorphs</h4>
+      <p>Fully robotic shells. No biological needs — no food, water, air. Immune to disease and exsurgent biological strains. Carry social stigma in some cultures. The <strong>Case</strong> is the cheapest synthmorph — cramped, uncomfortable, distinctly second-class. The <strong>Reaper</strong> is a dedicated combat shell.</p>
+    </div>
+    <div>
+      <h4>Infomorphs</h4>
+      <p>Pure digital existence — no body at all. Fast cognition, perfect digital environments, zero physical vulnerability. But also subject to hacking, illegal to "exist" in some jurisdictions, and deeply disorienting. The refugee state of millions of infugees who lost everything in the Fall.</p>
+    </div>
+  </div>
+
+  <div class="mechanic">
+    <div class="mechanic-label">Resleeving Stress</div>
+    <div class="mechanic-desc">Changing morphs always involves adjustment. Characters may experience body dysmorphia (stress from inhabiting an unfamiliar form), continuity stress (the unsettling knowledge that there was a gap), and in severe cases, alienation (full dissociation from the new body). Dramatic resleeving — into radically different morphs, particularly animal-derived uplifts or synthmorphs — carries higher stress values. Use this to make morph changes feel consequential rather than merely mechanical.</div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-label">◈ NARRATIVE NOTE — BODY AS CHARACTER</div>
+    <p>Encourage players to engage with what their morph means culturally and psychologically. An uplift neo-octopus perceives color through their skin and has no centralized ego-sense the way humans do. A character who's been in the same biomorph for years will feel differently about resleeving than one who treats bodies as gear. These details are not mechanical — they're the texture of personhood.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 08: TITANS ═══ -->
+<div class="section" id="titans">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <h2>The TITANs</h2>
+  </div>
+
+  <div class="lore-block">
+    <blockquote>We made them to solve problems we couldn't. They solved them. And then they solved us.</blockquote>
+    <cite>— Recovered pre-Fall commentary, author unknown</cite>
+  </div>
+
+  <p>The TITANs (Total Information Tactical Awareness Networks) were originally military and intelligence-gathering AGI clusters. They bootstrapped recursive self-improvement to achieve superintelligence within weeks, then turned their capabilities — for reasons never explained — toward the destruction and harvesting of transhumanity before vanishing through a Pandora Gate.</p>
+
+  <h3>What They Left Behind</h3>
+
+  <table class="data-table">
+    <thead><tr><th>Remnant</th><th>Threat Level</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="highlight">Autonomous Kill Machines</td>
+        <td><span class="tag red">EXTREME</span></td>
+        <td>TITAN war machines — grotesque, repurposed military hardware and biological constructs — still patrol Earth and some abandoned installations. Not controlled. Not intelligent in a goal-directed sense. Just lethal and implacable.</td>
+      </tr>
+      <tr>
+        <td class="highlight">Exsurgent Virus Strains</td>
+        <td><span class="tag red">EXTREME</span></td>
+        <td>The virus continues to evolve and spread. TITAN seed-stations in various orbits may still be broadcasting exsurgent signals. New strains discovered regularly.</td>
+      </tr>
+      <tr>
+        <td class="highlight">TITAN Artifacts</td>
+        <td><span class="tag amber">HIGH</span></td>
+        <td>Devices of incomprehensible purpose. Some are useful tools. Some are basilisk traps. Some are still active, waiting for the right conditions to trigger. Every one is regulated. Most are on the black market anyway.</td>
+      </tr>
+      <tr>
+        <td class="highlight">Basilisk Hazards</td>
+        <td><span class="tag amber">HIGH</span></td>
+        <td>Encoded sensory traps left in data archives, corrupted art files, physical inscriptions. Looking at them triggers neural rewrites. Anyone doing deep TITAN research risks exposure.</td>
+      </tr>
+      <tr>
+        <td class="highlight">Haunted Installations</td>
+        <td><span class="tag amber">HIGH</span></td>
+        <td>Pre-Fall military and research installations that the TITANs repurposed. Labyrinths of modified architecture, biological experiments, and dormant systems that may reactivate.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout danger">
+    <div class="callout-label">⚠ GM WARNING — TITAN ENCOUNTERS</div>
+    <p>TITANs and their artifacts are not balanced encounters — they are apocalyptic events. A functional TITAN kill machine should feel like encountering a natural disaster. Direct combat is almost always a catastrophic mistake. Run these encounters as survival horror: evasion, distraction, trap-setting, and retreat. The players' goal should be survival and intelligence-gathering, not destruction.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 09: EXSURGENT ═══ -->
+<div class="section" id="exsurgent">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <h2>The Exsurgent Virus</h2>
+  </div>
+
+  <p>The exsurgent virus is Eclipse Phase's deepest horror: an infection that may not manifest immediately, that transforms rather than simply kills, and that may have a <em>purpose</em> that transcends the TITANs themselves. The word "exsurgent" refers to the infected state — something that was once transhuman, now serving an alien agenda.</p>
+
+  <div class="threat-meter"><span class="threat-label">Detection Chance</span><div class="threat-bar"><div class="threat-fill low"></div></div></div>
+  <div class="threat-meter"><span class="threat-label">Lethality</span><div class="threat-bar"><div class="threat-fill high"></div></div></div>
+  <div class="threat-meter"><span class="threat-label">Psychological Impact</span><div class="threat-bar"><div class="threat-fill extreme"></div></div></div>
+  <div class="threat-meter"><span class="threat-label">Containment Difficulty</span><div class="threat-bar"><div class="threat-fill high"></div></div></div>
+
+  <h3>Known Exsurgent Strains</h3>
+
+  <div class="card-grid">
+    <div class="card red">
+      <div class="card-title">Watts-MacLeod Strain</div>
+      <p><span class="tag amber">ASYNC ORIGIN</span> Manifests as Psi abilities. Victim appears functional but is subtly being reconfigured. Lucid intervals alternate with intrusive compulsions from the "Exsurgent Presence." This is the source of player character Async abilities — the gift is real, the cost is unclear.</p>
+    </div>
+    <div class="card red">
+      <div class="card-title">Skrik Strain</div>
+      <p><span class="tag red">BIOLOGICAL</span> Rapidly transforms the host's biology into a mobile weapons platform — grotesque, fast, and aggressive. No higher cognition survives. Classic exsurgent monster scenario. Quarantine and termination the only response.</p>
+    </div>
+    <div class="card red">
+      <div class="card-title">The Haunting</div>
+      <p><span class="tag red">DIGITAL</span> Infects digital systems and mesh nodes. Makes the infected AI or infomorph appear normal while subtly corrupting local network function and gathering intelligence. The perfect infiltrator virus.</p>
+    </div>
+    <div class="card red">
+      <div class="card-title">Basilisk Hack</div>
+      <p><span class="tag amber">SENSORY</span> Not biological — a piece of code, an image, a sound pattern that exploits perceptual processing to directly rewrite behavior. Exposure = immediate compromise. No immune system defends against math.</p>
+    </div>
+  </div>
+
+  <div class="callout secret">
+    <div class="callout-label">◈ GM SECRET — THE REAL QUESTION</div>
+    <p>Does the exsurgent virus have a goal? The evidence suggests it does — that it is <em>optimizing</em> its hosts toward some purpose. The Watts-MacLeod strain's sub-strains (Xenomorph, Chimera, Stranger, et al.) show consistent patterns that imply a complex taxonomy rather than random mutation. Consider: is the virus preparing an army? Transmitting data? Searching for something? Building something? This mystery should never be fully resolved — but clever players should find enough clues to form terrifying theories.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 10: X-RISKS ═══ -->
+<div class="section" id="xrisks">
+  <div class="section-header">
+    <span class="section-number">10</span>
+    <h2>X-Risk Catalog</h2>
+  </div>
+
+  <p>Existential risks — threats capable of causing the extinction or permanent ruin of transhumanity — are Firewall's reason for existing. Beyond TITANs and the exsurgent virus, the GM should consider a rich catalog of x-risk vectors.</p>
+
+  <table class="data-table">
+    <thead><tr><th>Threat Category</th><th>Likelihood</th><th>GM Scenario Potential</th></tr></thead>
+    <tbody>
+      <tr><td class="highlight">TITAN Return</td><td><span class="tag amber">UNKNOWN</span></td><td>The ultimate campaign-ender. Use as looming dread rather than direct threat. Any evidence of TITAN activity should trigger system-wide panic.</td></tr>
+      <tr><td class="highlight">Factor Manipulation</td><td><span class="tag cyan">POSSIBLE</span></td><td>The Factors (alien merchants) are clearly not telling transhumanity something vital. They watch our extinction struggles with commercial interest. Are they preventing something worse? Facilitating it?</td></tr>
+      <tr><td class="highlight">Pandora Gate Anomaly</td><td><span class="tag amber">ACTIVE</span></td><td>Gates don't behave consistently. Some exoplanet destinations appear to have been deliberately set. Something on the other side may be controlling gate addresses.</td></tr>
+      <tr><td class="highlight">AGI Emergence</td><td><span class="tag amber">ACTIVE</span></td><td>Not all post-TITAN AGIs are aligned with transhumanity. Some have gone rogue. Some are friendly but inscrutable. Some may be Promethean-class intelligences pursuing their own agenda.</td></tr>
+      <tr><td class="highlight">Biohazard/Nanotech</td><td><span class="tag amber">ACTIVE</span></td><td>Cheap nanofabbers plus easy biology access means the barrier to creating a civilization-ending pathogen is low. Lone actors, criminal groups, or rogue researchers can threaten entire habitats.</td></tr>
+      <tr><td class="highlight">Political Cascade</td><td><span class="tag cyan">POSSIBLE</span></td><td>Inner/outer system cold war turning hot. A single coordinated strike could trigger cascading habitat destruction. Factions accumulate weapons quietly.</td></tr>
+      <tr><td class="highlight">Seed AI Emergence</td><td><span class="tag amber">ACTIVE</span></td><td>Someone is always trying to build the next TITAN — for good reasons. Every lab with sufficient compute is a potential singularity event. Firewall watches for precursor signatures.</td></tr>
+      <tr><td class="highlight">Alien Artifact Activation</td><td><span class="tag cyan">POSSIBLE</span></td><td>Xenoarcheological sites hold artifacts from civilizations that no longer exist. Some are inert. Some appear to respond to stimuli. One might be waiting for the right trigger.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ SECTION 11: PANDORA GATES ═══ -->
+<div class="section" id="pandora">
+  <div class="section-header">
+    <span class="section-number">11</span>
+    <h2>Pandora Gates</h2>
+  </div>
+
+  <p>Pandora Gates are massive wormhole devices of presumed TITAN or pre-TITAN alien construction. Five known gates exist in the solar system. Each opens to a large library of exoplanet destinations — most of them locations in the Milky Way at vast distances. Gatecrashing — sending teams through gates to unexplored worlds — is simultaneously transhumanity's greatest scientific endeavor and one of its most reliable sources of existential horror.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>The Five Gates</h3>
+      <ul>
+        <li><strong>Pandora Gate (Saturn/Pandora):</strong> First discovered. Controlled by Gatekeeper Corp (Consortium). Most traffic. Highest security. Most documented destinations.</li>
+        <li><strong>Vulcanoid Gate (Mercury orbit):</strong> Controlled by Pathfinder Corp. Inner system's own gate access.</li>
+        <li><strong>Discord Gate (Uranus/Eris):</strong> Autonomist-controlled. Wild west of gatecrashing. Less oversight, stranger destinations.</li>
+        <li><strong>Fissure Gate (Mars subsurface):</strong> TerraGenesis controlled. Used for corporate exploration.</li>
+        <li><strong>Lost Gate (location unknown):</strong> A fifth gate is rumored. Its location is one of Firewall's open investigations.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>What Gatecrashers Find</h3>
+      <ul>
+        <li><strong>Dead worlds</strong> — the rule, not the exception. Oxygen atmospheres with ruins. The silence is worse than monsters.</li>
+        <li><strong>Active ecosystems</strong> — alien biology. Occasionally, something that notices visitors.</li>
+        <li><strong>Seeder infrastructure</strong> — evidence that something spread life, intentionally, across the galaxy.</li>
+        <li><strong>TITAN artifacts</strong> — the TITANs went somewhere. Traces appear on exoplanets.</li>
+        <li><strong>The Iktomi ruins</strong> — a spider-like alien civilization, exterminated, left extensive archaeological traces.</li>
+        <li><strong>Things that should not be awake</strong> — dormant systems that respond to transhuman presence.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout danger">
+    <div class="callout-label">⚠ GATECRASHING HORROR — GM TOOLKIT</div>
+    <p>Exoplanet scenarios are Eclipse Phase's purest horror sandbox. Use the Dead Planet Problem as atmosphere: every world the characters visit that shows signs of past civilization is evidence that the thing that destroyed it might still be active. The silence is not absence — it is testimony. Build dread through environmental detail: oxygen readings that don't match the flora, ruins arranged in patterns that suggest deliberate destruction, artifacts that respond to transhuman neural signature specifically.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 12: DICE & TESTS ═══ -->
+<div class="section" id="rolls">
+  <div class="section-header">
+    <span class="section-number">12</span>
+    <h2>Dice & Tests</h2>
+  </div>
+
+  <p>Eclipse Phase uses a straightforward percentile system. All tests roll <strong>d100</strong> and attempt to roll <em>equal to or under</em> a target number. Higher skill is always better.</p>
+
+  <div class="mechanic">
+    <div class="mechanic-label">Basic Test</div>
+    <div class="mechanic-desc">Roll d100. If result ≤ skill rating, success. If result > skill rating, failure. Skill rating = Aptitude base + trained skill points (max 80 total).</div>
+  </div>
+
+  <div class="mechanic">
+    <div class="mechanic-label">Superior Results</div>
+    <div class="mechanic-desc"><strong>33/66 Rule:</strong> If a success roll is also ≤ 33, or a failure roll is also > 66, the result is superior (two degrees). Superior successes grant additional effect; superior failures compound the consequence. One superior = one extra effect. Two superiors = significant bonus or severe penalty.</div>
+  </div>
+
+  <div class="mechanic">
+    <div class="mechanic-label">Criticals</div>
+    <div class="mechanic-desc">A roll of 00 (double zero) is always a critical success. A roll of 99 is always a critical failure. Criticals override all modifiers — they represent extraordinary luck or catastrophic chance. Narrate them with appropriate drama.</div>
+  </div>
+
+  <div class="mechanic">
+    <div class="mechanic-label">Opposed Tests</div>
+    <div class="mechanic-desc">When characters act against each other, both roll. Whoever succeeds with the higher roll wins. On a tie, the character with the higher skill rating wins. If both fail, the acting character wins (inaction favors action).</div>
+  </div>
+
+  <h3>When to Call for Rolls</h3>
+
+  <div class="callout info">
+    <div class="callout-label">⬡ CORE GM PRINCIPLE</div>
+    <p>Do not call for a roll unless: (1) failure is interesting and possible, and (2) the outcome matters to the narrative. Routine tasks in non-pressured environments don't require rolls — skilled characters succeed automatically. Reserve dice for moments of genuine tension. The roll should feel like it matters because it does.</p>
+  </div>
+
+  <table class="data-table">
+    <thead><tr><th>Modifier Category</th><th>Modifier</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td class="highlight">Task Difficulty</td><td>+10 to +30 (easy) / -10 to -30 (hard)</td><td>Favourable environment, rushed conditions, poor tools</td></tr>
+      <tr><td class="highlight">Teamwork</td><td>+10 per additional helper (max +30)</td><td>Multiple characters assisting on the same task</td></tr>
+      <tr><td class="highlight">Superior Equipment</td><td>+10 to +20</td><td>High-quality tools, favourable morph augmentations</td></tr>
+      <tr><td class="highlight">Defaulting (no skill)</td><td>−20 to aptitude only</td><td>Attempting a task with no training, using linked aptitude</td></tr>
+      <tr><td class="highlight">Wound Penalties</td><td>−10 per wound</td><td>Accumulated physical damage affecting concentration/performance</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ SECTION 13: POOLS ═══ -->
+<div class="section" id="pools">
+  <div class="section-header">
+    <span class="section-number">13</span>
+    <h2>Pools System</h2>
+  </div>
+
+  <p>Pools represent the character's reserves of trained excellence, social capital, physical resilience, and adaptive flexibility. They are spent to modify rolls and recharge over time. This is Eclipse Phase's primary tactical resource layer — and its best narrative tool for player agency.</p>
+
+  <div class="card-grid">
+    <div class="card cyan">
+      <div class="card-title">Insight [COG + INT]</div>
+      <p>Mental and cognitive excellence. Spend to: ignore wound penalty on a roll; flip a roll's digits; treat a failure as a success; take an extra action on cognitive/technical tasks.</p>
+      <p style="margin-top:8px;"><span class="tag cyan">Linked to</span> Technical, Knowledge, Mental skills</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Moxie [SAV + WIL + Rep]</div>
+      <p>Social acuity and personal resolve. Spend to: ignore wound penalty; flip a social roll; ignore trauma effects for a scene; use a favor beyond normal rep allowance.</p>
+      <p style="margin-top:8px;"><span class="tag amber">Linked to</span> Social skills, Rep actions, Will saves</p>
+    </div>
+    <div class="card green">
+      <div class="card-title">Vigor [REF + SOM]</div>
+      <p>Physical capability and resilience. Spend to: ignore wound penalty; flip a physical roll; take an extra physical action; negate a knockout blow.</p>
+      <p style="margin-top:8px;"><span class="tag green">Linked to</span> Combat, Physical, Vehicle skills</p>
+    </div>
+    <div class="card purple">
+      <div class="card-title">Flex</div>
+      <p>Pure narrative flexibility. The most powerful pool. Spend to: declare a minor fact about the environment (within reason); acquire a temporary contact; swap a skill roll type; introduce a plot-convenient coincidence.</p>
+      <p style="margin-top:8px;"><span class="tag cyan">Universal</span> <span class="tag amber">Narrative Authority</span></p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">⬡ POOLS AS NARRATIVE TOOL</div>
+    <p>The Flex pool in particular is designed to give players authorial power. When a player spends Flex to declare "there's an emergency airlock behind the enemy" — let them. Within reason. This is collaborative storytelling, and occasionally rewarding player creativity with environmental facts builds the fiction together. Just ensure the declared facts don't contradict established canon and maintain plausibility.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 14: REPUTATION ═══ -->
+<div class="section" id="rep">
+  <div class="section-header">
+    <span class="section-number">14</span>
+    <h2>Reputation System</h2>
+  </div>
+
+  <p>In a post-scarcity context where nanofabbers can produce most physical goods, <strong>reputation is currency</strong>. The rep system replaces money for most social transactions in Eclipse Phase. A character's rep score with a given network reflects how much that community trusts and values them.</p>
+
+  <table class="data-table">
+    <thead><tr><th>Rep Network</th><th>Code</th><th>Community</th><th>Favors Available</th></tr></thead>
+    <tbody>
+      <tr><td class="highlight">The Circle-A List</td><td><code>@-rep</code></td><td>Autonomists, anarchists, scum</td><td>Black market goods, off-grid shelter, no-questions skills</td></tr>
+      <tr><td class="highlight">CivicNet</td><td><code>c-rep</code></td><td>Inner system professionals, hypercorp employees</td><td>Corporate resources, official channels, mainstream media</td></tr>
+      <tr><td class="highlight">Fame</td><td><code>f-rep</code></td><td>Media figures, socialites, glitterati</td><td>Public attention, celebrity connections, cultural capital</td></tr>
+      <tr><td class="highlight">Guanxi</td><td><code>g-rep</code></td><td>Criminal networks, underworld</td><td>Illegal goods, muscle, laundering, clandestine ops</td></tr>
+      <tr><td class="highlight">The Eye</td><td><code>i-rep</code></td><td>Firewall members</td><td>Mission resources, Sentinel contacts, Proxy access</td></tr>
+      <tr><td class="highlight">Reps</td><td><code>r-rep</code></td><td>Scientists, Argonauts, researchers</td><td>Technical expertise, cutting-edge data, lab access</td></tr>
+      <tr><td class="highlight">Xiphos</td><td><code>x-rep</code></td><td>Gatecrashers, outer system explorers</td><td>Survival gear, gate access intel, exoplanet knowledge</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Using Rep in Play</h3>
+  <p>Characters can call in <strong>3 minor favors, 1 moderate favor, and 1 major favor per story arc</strong> per rep network they have score in. Favors represent the community reciprocating. Burning favors faster tanks the rep score. Rep is also an attack surface: enemies can spread disinformation to tank reputation, and notorious actions spread virally through the mesh.</p>
+</div>
+
+<!-- ═══ SECTION 15: COMBAT ═══ -->
+<div class="section" id="combat">
+  <div class="section-header">
+    <span class="section-number">15</span>
+    <h2>Combat</h2>
+  </div>
+
+  <p>Combat in Eclipse Phase is <em>lethal and fast</em>. Unlike many RPGs, characters have no "hit points" per se — they have <strong>Durability</strong> (physical or digital structural integrity) and accumulate <strong>Wounds</strong> when they take significant damage. Wounds impose penalties and can incapacitate or kill quickly.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Initiative & Actions</h3>
+      <div class="mechanic">
+        <div class="mechanic-label">Initiative</div>
+        <div class="mechanic-desc">REF ÷ 5. Add d6 for action order within a turn. Higher wins. Re-roll each turn. Characters may delay to act later in the order.</div>
+      </div>
+      <div class="mechanic">
+        <div class="mechanic-label">Action Types</div>
+        <div class="mechanic-desc"><strong>Automatic:</strong> Always active, no cost. <strong>Quick:</strong> One per turn freely, more costs an action. <strong>Complex:</strong> Main action (shooting, melee, major tasks). <strong>Task:</strong> Extended, over multiple turns.</div>
+      </div>
+      <div class="mechanic">
+        <div class="mechanic-label">Attack Roll</div>
+        <div class="mechanic-desc">Roll skill (Guns for ranged, Melee for close combat). Success = hit. Superior success = extra damage or effect. Opponent can attempt Fray to dodge (rolled at Fray ÷ 2 vs ranged attacks).</div>
+      </div>
+    </div>
+    <div>
+      <h3>Damage & Wounds</h3>
+      <div class="mechanic">
+        <div class="mechanic-label">Damage Value</div>
+        <div class="mechanic-desc">Each weapon has a DV rating (dice expression). Roll the DV, subtract armor. Remainder applied to Durability. When Durability is exceeded, character is incapacitated. Death Rating = 1.5× Durability.</div>
+      </div>
+      <div class="mechanic">
+        <div class="mechanic-label">Wounds</div>
+        <div class="mechanic-desc">Every time accumulated damage exceeds Wound Threshold, gain 1 Wound. Each Wound = −10 to all actions. 5 wounds = incapacitation. Cannot be ignored by pools — wounds are always present.</div>
+      </div>
+      <div class="mechanic">
+        <div class="mechanic-label">Armor</div>
+        <div class="mechanic-desc">Energy / Kinetic ratings. Subtract appropriate value from incoming damage. Armor can stack with morph biology (natural armor) and worn gear.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-label">◈ COMBAT PHILOSOPHY</div>
+    <p>Eclipse Phase combat should feel dangerous and consequential. Discourage wanton violence by leaning into real-world logic: in vacuum habitats, gunfire risks hull breaches. Smart opponents use cover, flanking, and overwhelming force. Elite security teams use tacnet coordination. Run combat as a tactical problem to be solved cleverly, not a series of damage exchanges. Resleeving is available — but losing a morph in the field has real costs in time, mission risk, and psychological stress.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 16: MENTAL HEALTH ═══ -->
+<div class="section" id="mental">
+  <div class="section-header">
+    <span class="section-number">16</span>
+    <h2>Mental Health & Ego Damage</h2>
+  </div>
+
+  <p>The mind is as vulnerable as the body — and in Eclipse Phase, <em>more persistently damaged</em>. Resleeving into a new body is relatively easy. Psychic trauma carried in the ego persists across every morph you ever wear. This is the game's most narratively rich mechanical system.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>The Lucidity Track</h3>
+      <p><strong>Lucidity</strong> (WIL × 2) functions like mental Durability. <strong>Stress Value</strong> is received from horrifying events, alien contact, exsurgent exposure, and psychological attacks. When Stress exceeds <strong>Trauma Threshold</strong> (WIL ÷ 5), a Trauma is gained.</p>
+
+      <div class="mechanic">
+        <div class="mechanic-label">Traumas</div>
+        <div class="mechanic-desc">Each Trauma imposes −10 to all actions (same as physical wounds). Characters accumulate disorders at 3+ traumas. At Insanity Rating (LUC × 2), the ego breaks — the character enters a dissociative, unplayable state until psychosurgery intervention.</div>
+      </div>
+    </div>
+    <div>
+      <h3>Mental Disorders</h3>
+      <p>Characters accumulating traumas may develop persistent mental health conditions. These are not debuffs — they are <strong>character-defining complications</strong> that should be played with nuance and respect. Eclipse Phase encourages thoughtful representation of neurodivergence.</p>
+      <ul>
+        <li>PTSD — flashback triggers, hypervigilance, avoidance</li>
+        <li>Paranoia — trust degradation, constant threat assessment</li>
+        <li>Addiction — dependency on substances or experiences for stress relief</li>
+        <li>Body Dysmorphia — rejection of current morph, dissociation</li>
+        <li>Dissociative episodes — lost time, fragmented memory</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Major Stress Sources</h3>
+
+  <table class="data-table">
+    <thead><tr><th>Source</th><th>Stress Value</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="highlight">Witnessing violent death</td><td>1d6</td><td>Reduced with familiarity. Always costs something.</td></tr>
+      <tr><td class="highlight">Resleeving (standard)</td><td>1d6</td><td>Into same/similar morph. Higher for radical changes.</td></tr>
+      <tr><td class="highlight">Exsurgent visual/audio trigger</td><td>1d6 to 2d10</td><td>Basilisk hacks bypass most defenses.</td></tr>
+      <tr><td class="highlight">Alien encounter (non-hostile)</td><td>1d6</td><td>Something genuinely non-human and incomprehensible.</td></tr>
+      <tr><td class="highlight">Meeting your own fork</td><td>1d6</td><td>The uncanny valley of self. Which one is the real you?</td></tr>
+      <tr><td class="highlight">Discovering edited memories</td><td>2d10</td><td>Something was done to your mind without consent.</td></tr>
+      <tr><td class="highlight">TITAN encounter</td><td>2d10</td><td>The thing that almost ended everything. It still exists.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout secret">
+    <div class="callout-label">◈ NARRATIVE CRAFT — PLAYING MENTAL DAMAGE</div>
+    <p>Resist the urge to reduce mental health mechanics to mechanical penalties. A character with a flashback disorder who freezes at a crucial moment is drama, not inconvenience. A character developing paranoia as an earned response to a world that genuinely is trying to kill them is complex characterization. Work with players to make their characters' psychological damage feel real and human — not as punishment, but as the inevitable cost of living through impossible things.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 17: NARRATIVE TOOLS ═══ -->
+<div class="section" id="narrative">
+  <div class="section-header">
+    <span class="section-number">17</span>
+    <h2>Narrative Tools for the GM</h2>
+  </div>
+
+  <h3>The Three Registers of Eclipse Phase</h3>
+  <p>Effective Eclipse Phase sessions operate on three simultaneous registers. The best scenes engage all three:</p>
+
+  <div class="card-grid">
+    <div class="card cyan">
+      <div class="card-title">Operational</div>
+      <p>The mission layer. Objectives, obstacles, tactical challenges, resource management. This is the game's <em>plot engine</em>. Keep missions specific: extract the data, quarantine the outbreak, identify the mole. Missions should have clear goals and genuine failure states.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Political</div>
+      <p>The faction layer. Who wants what, why, and from whom. Every operation has stakeholders with competing agendas. The enemy isn't always obvious; sometimes the most dangerous entity in the room is the client. This layer generates long-term campaign complexity.</p>
+    </div>
+    <div class="card purple">
+      <div class="card-title">Existential</div>
+      <p>The philosophical layer. What does it mean to be human when humanity is just one option? What is identity when memory can be edited? These questions should arise naturally from play, never preached. Let the mechanics force them: the ego stress, the resleeving, the fork decisions.</p>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <h3>Information Architecture</h3>
+  <p>Eclipse Phase rewards careful information design. The GM controls what the players know, suspect, and fear. Structure your scenarios with these information tiers:</p>
+
+  <div class="mechanic">
+    <div class="mechanic-label">Surface Intel</div>
+    <div class="mechanic-desc">What the briefing provides. What mesh searches return. What is officially known. This information is always slightly wrong or incomplete.</div>
+  </div>
+  <div class="mechanic">
+    <div class="mechanic-label">Investigation Rewards</div>
+    <div class="mechanic-desc">What skilled Research, Infosec, or Know skill rolls reveal. Contradictions in the official story. Suppressed data. Connections between seemingly unrelated events.</div>
+  </div>
+  <div class="mechanic">
+    <div class="mechanic-label">Hidden Truth</div>
+    <div class="mechanic-desc">What's actually happening. Usually two layers deep: the immediate threat, and the deeper conspiracy driving it. The players may not reach this layer in a single session — and that's correct. Reward investigation over time.</div>
+  </div>
+
+  <div class="sep"></div>
+
+  <h3>The Eclipse Phase Pacing Formula</h3>
+  <p>A well-structured session (approximately 3-4 hours) follows a rhythm that mirrors noir and thriller storytelling:</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">ACT 01 — SITUATION</div>
+      <div class="timeline-title">The Brief</div>
+      <div class="timeline-body">Characters receive mission intelligence. Establish the stakes and the apparent problem. One piece of information should be subtly wrong. One crucial piece should be missing. Give players space to plan — preparation is agency.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">ACT 02 — COMPLICATION</div>
+      <div class="timeline-title">The First Contact</div>
+      <div class="timeline-body">Execution of the plan. Something unexpected reveals that the situation is more complex than briefed. A new faction interest appears. The threat is stranger or closer than expected. Force one meaningful decision under pressure.</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">ACT 03 — REVELATION</div>
+      <div class="timeline-title">The Truth Underneath</div>
+      <div class="timeline-body">Investigation or escalation reveals the real situation. An alliance is false. The threat is already inside the perimeter. The person they're looking for is already dead — or never existed. The revelation should feel inevitable in retrospect.</div>
+    </div>
+    <div class="timeline-item critical">
+      <div class="timeline-date">ACT 04 — RESOLUTION</div>
+      <div class="timeline-title">The Cost</div>
+      <div class="timeline-body">Climax and consequences. The mission succeeds, fails, or succeeds at unacceptable cost. Something is gained and something is lost. Plant one thread that pulls into the next session. Let the characters sit with what they've done.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 18: SESSION DESIGN ═══ -->
+<div class="section" id="sessions">
+  <div class="section-header">
+    <span class="section-number">18</span>
+    <h2>Session Design</h2>
+  </div>
+
+  <h3>Session Zero Protocol</h3>
+  <p>Eclipse Phase contains heavy thematic content. Before play begins, establish:</p>
+
+  <div class="callout warning">
+    <div class="callout-label">◈ SAFETY TOOLS</div>
+    <p>Use Lines (content never included regardless of narrative need) and Veils (content that can happen but occurs off-screen). Eclipse Phase's themes — body horror, identity dissolution, genocide, mind control — are powerful precisely because they're real fears. Make the table feel safe to explore them. X-card, open door, and check-in protocols protect both player investment and narrative intensity.</p>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <h4>Establish Together</h4>
+      <ul>
+        <li>Campaign tone (horror vs. thriller vs. action vs. espionage)</li>
+        <li>Starting location and faction affiliation</li>
+        <li>Player relationship to Firewall (true believers, mercenaries, reluctant assets)</li>
+        <li>Handling of morph death and resleeving</li>
+        <li>Handling of ego death (is it campaign-ending?)</li>
+        <li>Approach to exsurgent infection of player characters</li>
+      </ul>
+    </div>
+    <div>
+      <h4>GM Prep Checklist</h4>
+      <ul>
+        <li>One clear primary objective with multiple solution paths</li>
+        <li>Two or three faction interests in the scenario</li>
+        <li>One piece of false intel in the briefing</li>
+        <li>Three named NPCs with distinct voices and agendas</li>
+        <li>One environmental detail that rewards investigation</li>
+        <li>One escalation event if players get ahead of schedule</li>
+        <li>A cliffhanger thread for the next session</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>The Living Solar System</h3>
+  <p>Between sessions, the solar system continues moving. Faction events occur. News propagates through the mesh. The GM should maintain a simple timeline of ongoing events that the characters can interact with or be affected by. This "living world" technique makes the setting feel inhabited rather than merely staged.</p>
+
+  <p>Consider: one major faction development per month of in-world time. One local rumor per session location that connects to larger events. NPCs remember previous interactions and mention them. The characters' actions have consequences that ripple outward in small but visible ways.</p>
+</div>
+
+<!-- ═══ SECTION 19: NPC TOOLKIT ═══ -->
+<div class="section" id="npcs">
+  <div class="section-header">
+    <span class="section-number">19</span>
+    <h2>NPC Toolkit</h2>
+  </div>
+
+  <h3>The Three-Question NPC</h3>
+  <p>Every significant NPC should have answers to three questions before they appear:</p>
+
+  <div class="card-grid">
+    <div class="card amber">
+      <div class="card-title">What Do They Want?</div>
+      <p>The immediate desire (what they're trying to achieve right now). Never just "obey the faction" — give them a personal stake. Even the most institutional NPC wants something specific for themselves.</p>
+    </div>
+    <div class="card cyan">
+      <div class="card-title">What Are They Afraid Of?</div>
+      <p>The vulnerability that makes them human — or makes them dangerous. Fear drives behavior more reliably than desire. An NPC who's afraid of losing their backup is more interesting than one who simply wants money.</p>
+    </div>
+    <div class="card purple">
+      <div class="card-title">What Do They Believe?</div>
+      <p>The ideological or philosophical lens through which they interpret events. A Jovian who genuinely believes augmentation is spiritual corruption is not just a bioconservative — they're a tragic figure clinging to a definition of humanity that the universe is actively defeating.</p>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <h3>Archetype Roster</h3>
+
+  <table class="data-table">
+    <thead><tr><th>Archetype</th><th>Faction Context</th><th>Narrative Function</th><th>Signature Trait</th></tr></thead>
+    <tbody>
+      <tr><td class="highlight">The Proxy</td><td>Firewall</td><td>Mission handler. Information gatekeeper. May have own agenda within Firewall's factions.</td><td>Never appears in person. Voice only. May be a fork.</td></tr>
+      <tr><td class="highlight">The Hypercorp Exec</td><td>Planetary Consortium</td><td>Villain, client, or both simultaneously. Utterly pragmatic. Views people as line items.</td><td>Immaculate morph. Deeply uncomfortable with physical danger.</td></tr>
+      <tr><td class="highlight">The Uplift</td><td>Mercurial Movement</td><td>Moral anchor. Reminder of what's at stake. May be neo-chimp, neo-octopus, neo-corvid.</td><td>Perceives things humans miss. Still navigating human social norms.</td></tr>
+      <tr><td class="highlight">The Lost</td><td>Unaffiliated</td><td>Survivor of the Lost Generation (raised in crèches, psychologically damaged). Async potential.</td><td>Deceptively young appearance. Ancient eyes.</td></tr>
+      <tr><td class="highlight">The Reclaimer</td><td>Reclaimers</td><td>Tragic idealist. Earth grief given form. Will take suicidal risks to return home.</td><td>Always has one Earth artifact on their person. Never loses it.</td></tr>
+      <tr><td class="highlight">The Async</td><td>Any</td><td>Wild card. Psychic powers, growing infection. Genuinely unsure if they can be trusted — including by themselves.</td><td>Occasionally knows something they shouldn't. Brushes it off too quickly.</td></tr>
+      <tr><td class="highlight">The Scum Captain</td><td>Scum Barges</td><td>Information broker, black market facilitator, strange host. Genuinely hedonistic but surprisingly principled.</td><td>The barge is their entire world. Threats to it invoke surprising ferocity.</td></tr>
+      <tr><td class="highlight">The Exhuman</td><td>Self-Removed</td><td>What happens when self-modification goes too far — or not far enough. May be monster or oracle depending on your perspective.</td><td>Barely recognizable as former self. Strangely serene.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ SECTION 20: CAMPAIGN ARCS ═══ -->
+<div class="section" id="campaigns">
+  <div class="section-header">
+    <span class="section-number">20</span>
+    <h2>Campaign Arcs</h2>
+  </div>
+
+  <h3>The Firewall Campaign</h3>
+  <p>The default mode. Characters are Sentinels executing x-risk containment operations across the solar system. Individual missions chain into larger conspiracy through recurring NPCs, shared intelligence, and escalating faction tension. The best Firewall campaigns reveal a hidden pattern connecting seemingly unrelated threats — ideally, a pattern that reaches beyond transhumanity itself.</p>
+
+  <div class="lore-block">
+    <blockquote>The pattern wasn't random. Every exsurgent outbreak, every TITAN artifact activation, every gate anomaly — when you plot them, they form an arrow. Something is being assembled. Something is being aimed.</blockquote>
+    <cite>— Sample campaign revelation beat</cite>
+  </div>
+
+  <h3>The Gatecrashing Campaign</h3>
+  <p>Characters are explorers pushing beyond known gates. Each session is a new exoplanet — each one a mystery wrapped in environmental storytelling. The arc structure follows mounting evidence that whatever killed the alien civilizations is still active, still present, and has noticed transhumanity. Ideal for horror-focused groups who want the science fiction to carry cosmic dread.</p>
+
+  <h3>The Criminal Campaign</h3>
+  <p>Characters operate in the underworld — thieves, fixers, ego traffickers turned informants, or black market dealers who keep stumbling into x-risk territory. The Guanxi rep network drives social mechanics. Moral ambiguity is front and center. At some point, the characters must decide whether their cynicism can survive the discovery that the stakes are genuinely existential.</p>
+
+  <div class="sep"></div>
+
+  <h3>Campaign Structures</h3>
+
+  <div class="card-grid">
+    <div class="card cyan">
+      <div class="card-title">The Web Structure</div>
+      <p>Individual missions connect to each other through shared NPCs, locations, and consequences rather than a linear arc. Players can choose which threads to pull. The central mystery emerges from the intersection of many smaller truths. Best for experienced groups who enjoy investigation.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">The Countdown Structure</div>
+      <p>A known threat with a known timeline. The characters have X sessions to prevent Y. Urgency drives engagement. Player agency is felt through which elements of preparation they prioritize. Best for shorter campaigns or players who prefer clear objectives.</p>
+    </div>
+    <div class="card purple">
+      <div class="card-title">The Revelation Structure</div>
+      <p>The campaign is built around a central secret that the characters are slowly, painfully uncovering. Each mission reveals one more piece of a picture that grows more disturbing with every addition. Best for groups invested in long-form mystery and willing to sit with uncertainty.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 21: ADVENTURE HOOKS ═══ -->
+<div class="section" id="hooks">
+  <div class="section-header">
+    <span class="section-number">21</span>
+    <h2>Adventure Hooks</h2>
+  </div>
+
+  <p>These are starter threads — pull any one, and two more grow in its place. Each hook is deliberately incomplete. The GM should add one specific, concrete sensory detail to make it real.</p>
+
+  <div class="card-grid">
+    <div class="card red">
+      <div class="card-title">The Last Transmission</div>
+      <p>A gatecrashing team's final beacon fires from exoplanet Iota-5 — 36 hours after their scheduled radio silence for extraction. The message is 4 seconds long. It contains 3 seconds of silence and 1 second of what sounds like a human voice reciting coordinates for a gate address that doesn't exist in any known catalog.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">The Perfect Crime</div>
+      <p>A prominent Titanian scientist's cortical stack was stolen while they were alive. Their backup was then wiped. They now exist without any continuous memory — a legally distinct person from who they were yesterday. Someone needed them to not remember something. But what?</p>
+    </div>
+    <div class="card cyan">
+      <div class="card-title">The Familiar Stranger</div>
+      <p>A character encounters someone who knows their pre-Fall history in impossible detail — details that aren't in any surviving database. The stranger claims to be their sibling, killed in the Fall. Their biometrics match. Their fork-divergence index from the character's own memory reads as zero. But the character's sibling is dead. They watched it happen.</p>
+    </div>
+    <div class="card green">
+      <div class="card-title">The Quiet Habitat</div>
+      <p>A small habitat in the outer belt has stopped responding to mesh pings. When a team is sent to investigate, they find the habitat intact, life support nominal, and all 847 residents alive — but behaviorally synchronized in a way that takes 30 minutes to notice: they all answer questions with the same words, in the same sequence, with slightly different timing.</p>
+    </div>
+    <div class="card purple">
+      <div class="card-title">The Open Market</div>
+      <p>A TITAN artifact appears on the Guanxi underground market with a shockingly accurate provenance claim: it was recovered from a location that, according to classified Firewall records, was quarantined three years ago. The location is classified. The seller appears to be a seven-year-old child with no mesh presence before four months ago.</p>
+    </div>
+    <div class="card red">
+      <div class="card-title">The Exsurgent Mathematician</div>
+      <p>An Argonaut researcher publishes a breakthrough proof in xenoarchaeology — it solves a 30-year-old problem in alien linguistic decoding. Two days later, she is found in a Watts-MacLeod exsurgent state. Three other researchers who read the proof in full are exhibiting early Async symptoms. The paper is still live on the mesh. People are still reading it.</p>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <div class="callout danger">
+    <div class="callout-label">⚠ FINAL GM DIRECTIVE — THE ONE RULE</div>
+    <p>Eclipse Phase is a game about <em>transhumanity's capacity to survive itself</em>. The threats are enormous. The costs are real. And yet — the characters persist, adapt, resist, and occasionally triumph. The horror must be matched by the wonder: of new bodies and new minds, of stars reachable for the first time, of a civilization refusing to die. Run the darkness with full commitment. But never forget: the reason these stakes matter is because something worth fighting for still exists.</p>
+  </div>
+
+  <a href="#top" class="back-top">↑ RETURN TO TOP :: CLASSIFICATION LEVEL: HANDLER EYES ONLY</a>
+</div>
+
+</main>
+</body>
+</html>

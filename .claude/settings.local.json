@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.github.com)",
+      "Bash(\"/c/Users/cagba/AppData/Local/GitHubDesktop/bin/github.bat\" --version)",
+      "Bash(\"/c/Users/cagba/AppData/Local/GitHubDesktop/bin/github\" --version)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(du -sh /c/Users/cagba/Documents/github/EclipsePhase/*)",
+      "Bash(git -C /c/Users/cagba/Documents/github/EclipsePhase/ lfs status)",
+      "Bash(git -C /c/Users/cagba/Documents/github/EclipsePhase/ remote -v)",
+      "Bash(gh repo:*)",
+      "Bash(xargs -I{} du -sh {})"
+    ]
+  }
+}

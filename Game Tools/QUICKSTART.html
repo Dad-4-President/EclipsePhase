@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP2e Character Sheet — User Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080c10;--panel:#0d1318;--card:#111920;--border:#1e3040;
+  --accent:#00c8ff;--accent-dim:#0077aa;--accent-glow:rgba(0,200,255,0.1);
+  --danger:#ff4444;--warn:#ffaa00;--success:#00dd88;
+  --text:#c8dce8;--muted:#6a8fa8;--faint:#3a5568;
+  --mono:'Share Tech Mono',monospace;--display:'Rajdhani',sans-serif;--body:'Exo 2',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.7;}
+.layout{display:flex;min-height:100vh;}
+nav{width:240px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding-bottom:2rem;}
+.nav-logo{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid var(--border);margin-bottom:0.5rem;}
+.nav-logo-title{font-family:var(--display);font-size:17px;font-weight:700;color:var(--accent);letter-spacing:0.06em;}
+.nav-logo-sub{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:3px;}
+.nav-section{padding:0.6rem 1.25rem 0.2rem;font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:0.12em;text-transform:uppercase;margin-top:0.5rem;}
+nav a{display:block;padding:0.35rem 1.25rem;font-size:13px;color:var(--muted);text-decoration:none;transition:all 0.15s;border-left:2px solid transparent;}
+nav a:hover{color:var(--accent);background:var(--accent-glow);border-left-color:var(--accent-dim);}
+main{flex:1;max-width:820px;padding:3rem 3rem 6rem;}
+.hero{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border);}
+.hero-tag{font-family:var(--mono);font-size:11px;color:var(--accent-dim);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.5rem;}
+.hero-title{font-family:var(--display);font-size:38px;font-weight:700;color:var(--accent);line-height:1.1;margin-bottom:0.75rem;}
+.hero-sub{font-size:15px;color:var(--muted);max-width:560px;line-height:1.7;}
+section{margin-bottom:3.5rem;}
+.section-title{font-family:var(--display);font-size:21px;font-weight:700;color:var(--accent);letter-spacing:0.05em;margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.section-num{font-family:var(--mono);font-size:12px;color:var(--faint);}
+h3{font-family:var(--display);font-size:15px;font-weight:600;color:var(--text);margin:1.5rem 0 0.5rem;letter-spacing:0.03em;}
+p{color:var(--muted);margin-bottom:0.75rem;}
+.steps{margin:1rem 0;}
+.step{display:flex;gap:14px;margin-bottom:1.25rem;}
+.step-num{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:var(--accent-dim);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:3px;}
+.step-body{flex:1;}
+.step-title{font-family:var(--display);font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.callout{border-radius:6px;padding:0.9rem 1.1rem;margin:1rem 0;display:flex;gap:0.75rem;align-items:flex-start;}
+.callout-tip{background:rgba(0,221,136,0.07);border:1px solid rgba(0,221,136,0.2);}
+.callout-warn{background:rgba(255,170,0,0.07);border:1px solid rgba(255,170,0,0.2);}
+.callout-info{background:rgba(0,200,255,0.07);border:1px solid rgba(0,200,255,0.18);}
+.callout-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.callout-text{font-size:13px;line-height:1.6;}
+.callout-tip .callout-text{color:#80eebb;}
+.callout-warn .callout-text{color:#ffc870;}
+.callout-info .callout-text{color:#80dcf4;}
+.callout-text strong{font-weight:600;}
+.tab-bar-demo{display:flex;flex-wrap:wrap;gap:4px;background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin:0.75rem 0 1.5rem;}
+.tab-demo{font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:5px 12px;border-radius:4px;color:var(--muted);border:1px solid var(--border);}
+.tab-demo.active{color:var(--accent);border-color:var(--accent-dim);background:var(--accent-glow);}
+.field-list{display:flex;flex-direction:column;gap:6px;margin:0.75rem 0 1.25rem;}
+.field-row{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:9px 12px;}
+.field-name{font-family:var(--mono);font-size:12px;color:var(--accent);min-width:160px;flex-shrink:0;margin-top:1px;}
+.field-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+code{font-family:var(--mono);font-size:12px;color:var(--accent);background:rgba(0,200,255,0.08);padding:1px 6px;border-radius:3px;}
+kbd{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:1px 7px;font-family:var(--mono);font-size:12px;color:var(--text);}
+.faq-item{border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden;}
+.faq-q{font-family:var(--display);font-size:14px;font-weight:600;color:var(--text);padding:0.9rem 1.1rem;background:var(--card);}
+.faq-a{font-size:13px;color:var(--muted);padding:0.75rem 1.1rem 0.9rem;line-height:1.6;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-title">EP2e // USER GUIDE</div>
+    <div class="nav-logo-sub">CHARACTER MESH v1.0</div>
+  </div>
+  <div class="nav-section">Getting Started</div>
+  <a href="#launch">Launching the app</a>
+  <a href="#first-character">Your first character</a>
+  <a href="#tabs">Tab overview</a>
+  <div class="nav-section">The Tabs</div>
+  <a href="#tab-identity">Ego Identity</a>
+  <a href="#tab-aptitudes">Aptitudes & Stats</a>
+  <a href="#tab-skills">Skills</a>
+  <a href="#tab-morph">Morph / Sleeve</a>
+  <a href="#tab-gear">Gear & Weapons</a>
+  <a href="#tab-async">Async / Psi</a>
+  <a href="#tab-snapshots">Snapshots</a>
+  <div class="nav-section">Between Sessions</div>
+  <a href="#saving">How saving works</a>
+  <a href="#snapshots-guide">Taking snapshots</a>
+  <a href="#export">Backing up</a>
+  <a href="#share">Sharing with your GM</a>
+  <div class="nav-section">Help</div>
+  <a href="#faq">Common questions</a>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="hero-tag">Eclipse Phase 2e // Character Mesh</div>
+    <div class="hero-title">User Guide</div>
+    <div class="hero-sub">Everything you need to build, track, and maintain your operative across a campaign. No technical knowledge required.</div>
+  </div>
+
+  <section id="launch">
+    <div class="section-title"><span class="section-num">01</span> Launching the app</div>
+    <p>The app runs in your browser but lives on your computer — not the internet. You start it from VS Code's terminal.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <div class="step-title">Open VS Code</div>
+        <div class="step-desc">Double-click <code>EP2e-CharacterApp.code-workspace</code> in your Game Tools folder. Or open VS Code and go to <kbd>File</kbd> → <kbd>Open Workspace from File</kbd>.</div>
+      </div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <div class="step-title">Open the terminal</div>
+        <div class="step-desc">Press <kbd>Ctrl</kbd> + <kbd>`</kbd> (backtick — the key above Tab on the left). A terminal panel opens at the bottom of VS Code.</div>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">
+        <div class="step-title">Type this command and press Enter</div>
+        <div class="step-desc"><code>npm run dev</code><br><br>You'll see a message saying it's ready. Look for the line that says <code>Local: http://localhost:5173/</code></div>
+      </div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body">
+        <div class="step-title">Open your browser and go to that address</div>
+        <div class="step-desc">Type <code>http://localhost:5173</code> in your browser's address bar and press Enter. Bookmark it for next time.</div>
+      </div></div>
+    </div>
+    <div class="callout callout-warn">
+      <span class="callout-icon">⚠️</span>
+      <span class="callout-text"><strong>Keep the VS Code terminal running.</strong> The app goes offline if you close VS Code or press <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal. Just run <code>npm run dev</code> again to bring it back. Your character data is always safe.</span>
+    </div>
+  </section>
+
+  <section id="first-character">
+    <div class="section-title"><span class="section-num">02</span> Your first character</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <div class="step-title">Click "New Operative" in the left sidebar</div>
+        <div class="step-desc">A blank character appears. The main area opens to the Ego Identity tab ready to fill in.</div>
+      </div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <div class="step-title">Start with a name</div>
+        <div class="step-desc">Type your operative's handle or callsign in the first field. This shows in the sidebar and the top bar so you can always see who's active.</div>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">
+        <div class="step-title">Work through the tabs at your own pace</div>
+        <div class="step-desc">You don't have to fill everything at once. A good order: Identity → Aptitudes → Skills → Morph. Everything saves automatically as you type — there's no Save button.</div>
+      </div></div>
+    </div>
+    <div class="callout callout-tip">
+      <span class="callout-icon">✅</span>
+      <span class="callout-text"><strong>Multiple characters:</strong> Click "New Operative" again to add another. Switch between characters any time using the sidebar. Each player in your group can have their own operative in the same app.</span>
+    </div>
+  </section>
+
+  <section id="tabs">
+    <div class="section-title"><span class="section-num">03</span> Tab overview</div>
+    <p>Once a character is open, seven tabs appear across the top. Here's what each one covers:</p>
+    <div class="tab-bar-demo">
+      <div class="tab-demo active">Ego Identity</div>
+      <div class="tab-demo">Aptitudes & Stats</div>
+      <div class="tab-demo">Skills</div>
+      <div class="tab-demo">Morph / Sleeve</div>
+      <div class="tab-demo">Gear & Weapons</div>
+      <div class="tab-demo">Async / Psi</div>
+      <div class="tab-demo">Snapshots</div>
+    </div>
+    <div class="field-list">
+      <div class="field-row"><div class="field-name">Ego Identity</div><div class="field-desc">Who your character is — name, background, faction, motivations, reputation scores, ego traits, and backup record.</div></div>
+      <div class="field-row"><div class="field-name">Aptitudes & Stats</div><div class="field-desc">Your six core stats (COG, INT, REF, SAV, SOM, WIL). Everything else — initiative, pools, wound threshold — calculates automatically.</div></div>
+      <div class="field-row"><div class="field-name">Skills</div><div class="field-desc">Active and Know skills. Totals auto-calculate from your aptitudes. Quick-add from the full rulebook list.</div></div>
+      <div class="field-row"><div class="field-name">Morph / Sleeve</div><div class="field-desc">The body you're currently in. Browse morphs by type, select ware and implants, track armor totals.</div></div>
+      <div class="field-row"><div class="field-name">Gear & Weapons</div><div class="field-desc">Ranged and melee weapons with full stats pre-filled, plus a notes area for all other equipment.</div></div>
+      <div class="field-row"><div class="field-name">Async / Psi</div><div class="field-desc">Only for Async characters. Toggle on to track infection rating, sub-strain, sleights, and influence events.</div></div>
+      <div class="field-row"><div class="field-name">Snapshots</div><div class="field-desc">Save your character's full state between sessions, compare what changed, export backups.</div></div>
+    </div>
+  </section>
+
+  <section id="tab-identity">
+    <div class="section-title"><span class="section-num">04</span> Ego Identity tab</div>
+    <p>The who-you-are tab. Fill it during character creation and update it as the campaign develops.</p>
+    <h3>Identity fields</h3>
+    <div class="field-list">
+      <div class="field-row"><div class="field-name">Name / Aliases</div><div class="field-desc">Your operative's handle and any fake names or alternate identities you maintain.</div></div>
+      <div class="field-row"><div class="field-name">Background</div><div class="field-desc">EP2e background from a dropdown — Colonist, Drifter, Hyperelite, etc. Used for reference against rulebook starting packages.</div></div>
+      <div class="field-row"><div class="field-name">Career</div><div class="field-desc">What your character does — Hacker, Soldier, Explorer, Face, and so on.</div></div>
+      <div class="field-row"><div class="field-name">Faction</div><div class="field-desc">Who your character is aligned with — Firewall, Anarchist, Hypercorp, Titanian Commonwealth, etc.</div></div>
+      <div class="field-row"><div class="field-name">Motivations</div><div class="field-desc">Free text. Standard EP2e format: <code>+Survival, -Hypercorp Control, =Uplift Rights</code></div></div>
+      <div class="field-row"><div class="field-name">Rez Points</div><div class="field-desc">Two boxes — Unspent (available to spend) and Spent (running total of what you've used). Update after each session.</div></div>
+    </div>
+    <h3>Reputation Networks</h3>
+    <p>Seven rep networks scored 0–99. Update these as your GM awards or deducts rep during play. Each has a short description of what social network it covers.</p>
+    <h3>Ego Traits</h3>
+    <p>Click any trait button to toggle it on or off. Positive traits highlight green, negative traits highlight red. These are reference only — they don't apply mechanical penalties automatically.</p>
+    <h3>Backup Record</h3>
+    <p>Track when your last ego backup was made and where it's stored. In EP2e, this matters — if your morph dies, this determines what version of you is restored.</p>
+  </section>
+
+  <section id="tab-aptitudes">
+    <div class="section-title"><span class="section-num">05</span> Aptitudes & Stats tab</div>
+    <p>Set your six aptitudes here. Everything derived — initiative, pools, thresholds — calculates automatically.</p>
+    <h3>The six aptitudes</h3>
+    <div class="field-list">
+      <div class="field-row"><div class="field-name">COG — Cognition</div><div class="field-desc">Intelligence, memory, problem-solving. Linked to most technical and knowledge skills.</div></div>
+      <div class="field-row"><div class="field-name">INT — Intuition</div><div class="field-desc">Awareness, gut feeling, creativity. Drives Perceive and Research.</div></div>
+      <div class="field-row"><div class="field-name">REF — Reflexes</div><div class="field-desc">Speed and reaction time. Linked to Guns, Fray, Infiltrate, and Pilot skills.</div></div>
+      <div class="field-row"><div class="field-name">SAV — Savvy</div><div class="field-desc">Social awareness and emotional intelligence. Drives Deceive, Persuade, Kinesics.</div></div>
+      <div class="field-row"><div class="field-name">SOM — Somatics</div><div class="field-desc">Physical fitness and body control. Linked to Athletics, Melee, and Free Fall.</div></div>
+      <div class="field-row"><div class="field-name">WIL — Willpower</div><div class="field-desc">Mental fortitude and self-control. Drives Lucidity and mental health stats.</div></div>
+    </div>
+    <p>Click any aptitude value to edit it. Below each one the app shows the check value (APT × 3) — that's your base target number when rolling for that stat.</p>
+    <h3>Action Pools</h3>
+    <p>Insight, Moxie, Vigor, and Flex auto-calculate from your APTs. If your morph grants a pool bonus, type the override value in the box — otherwise leave it blank to use the auto value.</p>
+    <h3>Damage & Wounds — tracking during play</h3>
+    <div class="field-list">
+      <div class="field-row"><div class="field-name">Damage Taken</div><div class="field-desc">Running total of physical damage received. The health bar turns amber near Durability (unconscious) and red near Death Rating.</div></div>
+      <div class="field-row"><div class="field-name">Wounds</div><div class="field-desc">Number of active wound effects. Each wound applies a –10 to all checks.</div></div>
+      <div class="field-row"><div class="field-name">Stress Taken</div><div class="field-desc">Mental damage accumulated. Track against your Lucidity score.</div></div>
+      <div class="field-row"><div class="field-name">Traumas</div><div class="field-desc">Active trauma effects from mental damage. Each trauma is –10 to all checks.</div></div>
+    </div>
+  </section>
+
+  <section id="tab-skills">
+    <div class="section-title"><span class="section-num">06</span> Skills tab</div>
+    <p>Two columns: Active Skills (used during play) and Know Skills (background knowledge). Skill totals auto-calculate: Rank + linked APT score.</p>
+    <h3>Adding an Active Skill</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <div class="step-title">Click "+ Add" at the top of the Active Skills column</div>
+        <div class="step-desc">A panel drops down with two ways to add skills.</div>
+      </div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <div class="step-title">Click any skill name in the quick-add list</div>
+        <div class="step-desc">Standard skills from the rulebook appear as buttons. Click one and it's added instantly with the correct APT already linked.</div>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">
+        <div class="step-title">Set the rank</div>
+        <div class="step-desc">Type a number in the small "rank" box under the skill name. The Total column on the right updates immediately.</div>
+      </div></div>
+    </div>
+    <div class="callout callout-tip">
+      <span class="callout-icon">✅</span>
+      <span class="callout-text"><strong>Field skills</strong> like Hardware: Electronics or Medicine: Psychosurgery use the Custom section. Type the full name, pick the APT (usually COG), choose the type (technical), and set the rank.</span>
+    </div>
+    <h3>Adding a Know Skill</h3>
+    <p>Click "+ Add" in the Know Skills column on the right. Type the skill name (e.g. <code>Know: Martian History</code>), pick an APT, and set the rank. Know skills usually use INT or COG.</p>
+    <h3>Removing a skill</h3>
+    <p>Click the small ✕ on the right side of any skill row.</p>
+  </section>
+
+  <section id="tab-morph">
+    <div class="section-title"><span class="section-num">07</span> Morph / Sleeve tab</div>
+    <p>Tracks the physical body your ego currently inhabits. Update this when you resleeve.</p>
+    <h3>Picking a morph</h3>
+    <p>The right side of the tab shows the Morph Browser with four categories. Click the category tab, then click a morph name to select it. The stats on the left fill in automatically.</p>
+    <div class="field-list">
+      <div class="field-row"><div class="field-name">Biomorph</div><div class="field-desc">Standard biological bodies — Flat, Splicer, Exalt, Ghost, Fury, Olympian, and more.</div></div>
+      <div class="field-row"><div class="field-name">Synthmorph</div><div class="field-desc">Robotic shells — Case, Synth, Arachnoid, Savant, Reaper.</div></div>
+      <div class="field-row"><div class="field-name">Uplift</div><div class="field-desc">Uplifted animal bodies — Neo-Avian, Neo-Octopus, Neo-Gorilla, and others.</div></div>
+      <div class="field-row"><div class="field-name">Infomorph</div><div class="field-desc">Pure digital existence — no physical body at all.</div></div>
+    </div>
+    <p>If your exact morph isn't listed, pick the closest one and manually edit the WT, DUR, DR, and Movement fields to match your morph's actual stats from the rulebook or your GM's notes.</p>
+    <h3>Ware & Implants</h3>
+    <p>The lower right panel lists all standard ware from the rulebook organized by type. Click any item to toggle it on (highlights cyan) or off. All selected ware is stored on your character record.</p>
+    <h3>Armor</h3>
+    <p>Select your worn armor from the dropdown. The app adds it to any armor your morph provides natively and shows a combined Energy / Kinetic total.</p>
+  </section>
+
+  <section id="tab-gear">
+    <div class="section-title"><span class="section-num">08</span> Gear & Weapons tab</div>
+    <h3>Adding a weapon</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <div class="step-title">Click "+ Add" in the Ranged or Melee section</div>
+      </div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <div class="step-title">Click a weapon name from the rulebook list</div>
+        <div class="step-desc">The weapon card appears with DV, firing mode, range, ammo, and skill already filled in.</div>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">
+        <div class="step-title">Add notes if needed</div>
+        <div class="step-desc">Each weapon has a notes field — use it for ammo type, smart ammo loadout, mods, or anything else.</div>
+      </div></div>
+    </div>
+    <p>For custom or homebrew weapons, use the custom entry fields at the bottom of the add panel.</p>
+    <h3>Gear Notes</h3>
+    <p>The bottom of the tab is a free-text notes area for all other equipment — drugs, tools, nanofabber prints, gear packs, consumables. Write it however makes sense for your character.</p>
+  </section>
+
+  <section id="tab-async">
+    <div class="section-title"><span class="section-num">09</span> Async / Psi tab</div>
+    <p>For Async characters only. The tab starts locked — toggle it on first.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <div class="step-title">Click "Not Async" to enable the panel</div>
+        <div class="step-desc">The button turns red and says "ASYNC ACTIVE." All the Async fields unlock below.</div>
+      </div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <div class="step-title">Select your Sub-Strain</div>
+        <div class="step-desc">Pick from Architect, Beast, Haunter, Stranger, or Xenomorph.</div>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">
+        <div class="step-title">Set your Infection Rating</div>
+        <div class="step-desc">Type the current number. The bar changes from green (low) to amber (33+) to red (66+) matching the rulebook thresholds. Update it after any Influence event.</div>
+      </div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body">
+        <div class="step-title">Select your Sleights</div>
+        <div class="step-desc">Psi-Chi sleights are passive — click to toggle on/off, they highlight purple. Psi-Gamma sleights are active — they show their infection modifier cost and highlight red when selected.</div>
+      </div></div>
+    </div>
+    <h3>Influence Events</h3>
+    <p>Six numbered fields for your sub-strain's d6 influence event table. Field 1 is pre-filled with the universal physical damage result. Fill in the rest from your sub-strain's entry in the rulebook.</p>
+  </section>
+
+  <section id="tab-snapshots">
+    <div class="section-title"><span class="section-num">10</span> Snapshots tab</div>
+    <p>Snapshots capture your complete character state at a moment in time — like a save point in a game. Take one at the end of every session.</p>
+    <h3>Saving a snapshot</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <div class="step-title">Update all your session changes first</div>
+        <div class="step-desc">Rez points spent, new skills, gear acquired, damage healed — make sure everything is current before snapshotting.</div>
+      </div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <div class="step-title">Type a label and click Save</div>
+        <div class="step-desc">Name it something descriptive like <code>Session 3 — After resleeving</code> or <code>Before the Kronos run</code>. Press Enter or click Save.</div>
+      </div></div>
+    </div>
+    <h3>Comparing two snapshots</h3>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <div class="step-title">Click "Set A" on an earlier snapshot (the before)</div>
+      </div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <div class="step-title">Click "Set B" on a later snapshot (the after)</div>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">
+        <div class="step-title">Click "Compare Snapshots"</div>
+        <div class="step-desc">A Delta Report appears — every change between the two points color-coded: green for new additions, amber for changed values, red for things removed.</div>
+      </div></div>
+    </div>
+  </section>
+
+  <section id="saving">
+    <div class="section-title"><span class="section-num">11</span> How saving works</div>
+    <div class="callout callout-info">
+      <span class="callout-icon">💡</span>
+      <span class="callout-text"><strong>Everything saves automatically.</strong> Every field you type, every dropdown you change, every skill you add — it saves to your browser instantly. There is no Save button. You can close the tab and come back later and your character is right where you left it.</span>
+    </div>
+    <p>Characters are stored in your browser's local storage — they survive closing the tab, closing the browser, and restarting your computer. They stay put as long as you don't clear your browser data or switch browsers.</p>
+    <div class="callout callout-warn">
+      <span class="callout-icon">⚠️</span>
+      <span class="callout-text"><strong>One risk to know about:</strong> Clearing your browser's history or cache will delete your characters. Always download a JSON backup regularly from the Snapshots tab.</span>
+    </div>
+  </section>
+
+  <section id="snapshots-guide">
+    <div class="section-title"><span class="section-num">12</span> When to take snapshots</div>
+    <div class="field-list">
+      <div class="field-row"><div class="field-name">End of each session</div><div class="field-desc">The most important habit. Name it with the session number and a brief note about what happened.</div></div>
+      <div class="field-row"><div class="field-name">Before resleeving</div><div class="field-desc">Capture your old morph setup before switching, so you have a record of what you were running.</div></div>
+      <div class="field-row"><div class="field-name">After spending Rez Points</div><div class="field-desc">Mark advancement milestones. The diff view will show exactly which skills went up.</div></div>
+      <div class="field-row"><div class="field-name">Before a dangerous mission</div><div class="field-desc">A good reference point in case your character dies and you need to check their pre-mission state.</div></div>
+    </div>
+  </section>
+
+  <section id="export">
+    <div class="section-title"><span class="section-num">13</span> Backing up your character</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">
+        <div class="step-title">Go to the Snapshots tab</div>
+      </div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">
+        <div class="step-title">Click "Download JSON" in the Export section</div>
+        <div class="step-desc">Your browser downloads a file named something like <code>anarcat_ep2e.json</code>. Save it somewhere safe — Documents folder, USB drive, or cloud storage.</div>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">
+        <div class="step-title">To restore: click "Import Character JSON"</div>
+        <div class="step-desc">Paste the JSON file contents and click Import. The character reappears in the sidebar with all snapshot history intact.</div>
+      </div></div>
+    </div>
+    <div class="callout callout-tip">
+      <span class="callout-icon">✅</span>
+      <span class="callout-text">Download a backup JSON after every session, alongside your snapshot. Keep the last three or four — that way you can always roll back if something goes wrong.</span>
+    </div>
+  </section>
+
+  <section id="share">
+    <div class="section-title"><span class="section-num">14</span> Sharing with your GM</div>
+    <p>Send your GM the JSON export file via Discord, email, or however your group communicates. They import it into their own instance of the app using the Import button in the Snapshots tab.</p>
+    <p>This gives them your full character and all snapshot history — useful for tracking party advancement between story arcs or for reference during session prep.</p>
+    <div class="callout callout-info">
+      <span class="callout-icon">💡</span>
+      <span class="callout-text">Each player runs their own copy of the app on their own machine. Characters don't sync automatically between machines, but JSON exports make it straightforward to share updates whenever needed.</span>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="section-title"><span class="section-num">15</span> Common questions</div>
+
+    <div class="faq-item">
+      <div class="faq-q">My characters disappeared when I opened the app today.</div>
+      <div class="faq-a">Browser data was probably cleared, or you opened a different browser. Always keep JSON backup exports. If you have one, use the Import button in the Snapshots tab to restore it.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">The app says "localhost refused to connect" or won't load.</div>
+      <div class="faq-a">The dev server isn't running. Open VS Code, press <kbd>Ctrl</kbd>+<kbd>`</kbd>, and type <code>npm run dev</code> then press Enter. Refresh your browser once the ready message appears.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">My skill totals look wrong.</div>
+      <div class="faq-a">Check the linked APT for that skill. Skills added from the quick-add list have the correct APT pre-set. For custom skills, make sure you selected the right APT from the dropdown. Total = Rank + APT score (Perceive and Fray use APT × 2 as the base).</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">The morph I want isn't in the browser.</div>
+      <div class="faq-a">Pick the closest morph type and manually edit the WT, DUR, DR, and Movement fields on the left side to match your morph's actual stats from the rulebook or your GM's notes.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I delete a character?</div>
+      <div class="faq-a">Click the ✕ button next to the character's name in the left sidebar. A confirmation prompt appears before anything is permanently deleted.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I delete a snapshot?</div>
+      <div class="faq-a">In the Snapshots tab, each snapshot has a small red ✕ button on the right. Click it to remove that snapshot from the history.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I use this on my phone?</div>
+      <div class="faq-a">The app runs in any browser but the layout is built for a desktop screen. It's workable on a tablet in landscape mode, but not comfortable on a phone.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">I closed VS Code mid-session. Did I lose my data?</div>
+      <div class="faq-a">No — your character data auto-saves to the browser continuously. The only thing that stops when VS Code closes is the ability to view the app at localhost:5173. Reopen VS Code, run <code>npm run dev</code>, and everything is right where you left it.</div>
+    </div>
+  </section>
+
+</main>
+</div>
+</body>
+</html>
