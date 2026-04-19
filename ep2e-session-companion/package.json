@@ -1,7 +1,7 @@
 {
-  "name": "ep2e-character-app",
+  "name": "ep2e-session-companion",
   "version": "1.0.0",
-  "description": "Eclipse Phase 2e Character Builder & Snapshot Tracker",
+  "description": "Eclipse Phase 2e Session Companion - Character Builder, Tracker, GM Tools, and Campaign Context for iPad and Browser Play",
   "type": "module",
   "scripts": {
     "dev": "vite",
